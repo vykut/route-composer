@@ -29,7 +29,7 @@ struct RoutingInterceptorBox<RI: RoutingInterceptor>: AnyRoutingInterceptor, Pre
         isPrepared = true
     }
 
-    func perform(with context: AnyContext, completion: @escaping (RoutingResult) -> Void) {
+    func perform(with context: AnyContext, completion: @escaping @MainActor (RoutingResult) -> Void) {
         do {
             let typedContext: RI.Context = try context.value()
             assertIfNotPrepared()

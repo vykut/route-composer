@@ -66,7 +66,7 @@ public struct SingleNavigationRouter<R>: Router where R: Router {
     public func navigate<Context>(to step: DestinationStep<some UIViewController, Context>,
                                   with context: Context,
                                   animated: Bool,
-                                  completion: ((RoutingResult) -> Void)?) throws {
+                                  completion: @escaping @MainActor (RoutingResult) -> Void = { _ in }) throws {
         guard !lock.isNavigationInProgress else {
             throw RoutingError.compositionFailed(.init("Navigation is in progress"))
         }
@@ -74,7 +74,7 @@ public struct SingleNavigationRouter<R>: Router where R: Router {
         do {
             try router.navigate(to: step, with: context, animated: animated, completion: { success in
                 lock.stopNavigation()
-                completion?(success)
+                completion(success)
             })
         } catch {
             lock.stopNavigation()

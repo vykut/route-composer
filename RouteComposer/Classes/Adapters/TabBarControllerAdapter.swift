@@ -41,7 +41,7 @@ public struct TabBarControllerAdapter<VC: UITabBarController>: ConcreteContainer
         return [selectedViewController]
     }
 
-    public func makeVisible(_ viewController: UIViewController, animated: Bool, completion: @escaping (_: RoutingResult) -> Void) {
+    public func makeVisible(_ viewController: UIViewController, animated: Bool, completion: @escaping @MainActor (RoutingResult) -> Void) {
         guard let tabBarController else {
             completion(.failure(RoutingError.compositionFailed(.init("\(String(describing: VC.self)) has been deallocated"))))
             return
@@ -59,7 +59,7 @@ public struct TabBarControllerAdapter<VC: UITabBarController>: ConcreteContainer
         completion(.success)
     }
 
-    public func setContainedViewControllers(_ containedViewControllers: [UIViewController], animated: Bool, completion: @escaping (_: RoutingResult) -> Void) {
+    public func setContainedViewControllers(_ containedViewControllers: [UIViewController], animated: Bool, completion: @escaping @MainActor (RoutingResult) -> Void) {
         guard let tabBarController else {
             completion(.failure(RoutingError.compositionFailed(.init("\(String(describing: VC.self)) has been deallocated"))))
             return

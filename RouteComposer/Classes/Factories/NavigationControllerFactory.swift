@@ -34,7 +34,7 @@ public struct NavigationControllerFactory<VC: UINavigationController, C>: Contai
     public private(set) weak var delegate: UINavigationControllerDelegate?
 
     /// The additional configuration block
-    public let configuration: ((_: VC) -> Void)?
+    public let configuration: @MainActor (VC) -> Void
 
     // MARK: Methods
 
@@ -42,7 +42,7 @@ public struct NavigationControllerFactory<VC: UINavigationController, C>: Contai
     public init(nibName nibNameOrNil: String? = nil,
                 bundle nibBundleOrNil: Bundle? = nil,
                 delegate: UINavigationControllerDelegate? = nil,
-                configuration: ((_: VC) -> Void)? = nil) {
+                configuration: @escaping @MainActor (VC) -> Void = { _ in }) {
         self.nibName = nibNameOrNil
         self.bundle = nibBundleOrNil
         self.delegate = delegate
@@ -57,9 +57,7 @@ public struct NavigationControllerFactory<VC: UINavigationController, C>: Contai
         if !coordinator.isEmpty {
             navigationController.viewControllers = try coordinator.build(integrating: navigationController.viewControllers)
         }
-        if let configuration {
-            configuration(navigationController)
-        }
+        configuration(navigationController)
         return navigationController
     }
 

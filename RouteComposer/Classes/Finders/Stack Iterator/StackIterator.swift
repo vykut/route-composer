@@ -22,6 +22,6 @@ public protocol StackIterator {
     /// Returns `UIViewController` instance if found
     ///
     /// - Parameter predicate: A block that contains `UIViewController` matching condition
-    func firstViewController(where predicate: (UIViewController) -> Bool) throws -> UIViewController?
+    func firstViewController(where predicate: @MainActor (UIViewController) -> Bool) throws -> UIViewController?
 
 }

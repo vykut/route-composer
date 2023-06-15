@@ -59,7 +59,7 @@ public enum SplitViewControllerActions {
         public func perform(with viewController: UIViewController,
                             on splitViewController: ViewController,
                             animated: Bool,
-                            completion: @escaping (_: RoutingResult) -> Void) {
+                            completion: @escaping @MainActor (RoutingResult) -> Void) {
             integrate(viewController: viewController, in: &splitViewController.viewControllers)
             completion(.success)
         }
@@ -94,7 +94,7 @@ public enum SplitViewControllerActions {
         public func perform(with viewController: UIViewController,
                             on splitViewController: ViewController,
                             animated: Bool,
-                            completion: @escaping (_: RoutingResult) -> Void) {
+                            completion: @escaping @MainActor (RoutingResult) -> Void) {
             guard !splitViewController.viewControllers.isEmpty else {
                 completion(.failure(RoutingError.compositionFailed(.init("Master view controller is not set in " +
                         "\(splitViewController) to present a detail view controller \(viewController)."))))
@@ -137,7 +137,7 @@ public enum SplitViewControllerActions {
         public func perform(with viewController: UIViewController,
                             on splitController: ViewController,
                             animated: Bool,
-                            completion: @escaping (_: RoutingResult) -> Void) {
+                            completion: @escaping @MainActor (RoutingResult) -> Void) {
             guard !splitController.viewControllers.isEmpty else {
                 completion(.failure(RoutingError.compositionFailed(.init("Master view controller is not set in " +
                         "\(splitController) to push on a detail view controller \(viewController)."))))

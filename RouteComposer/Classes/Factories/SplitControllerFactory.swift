@@ -43,7 +43,7 @@ public struct SplitControllerFactory<VC: UISplitViewController, C>: ContainerFac
     public let preferredDisplayMode: UISplitViewController.DisplayMode?
 
     /// The additional configuration block
-    public let configuration: ((_: VC) -> Void)?
+    public let configuration: @MainActor (VC) -> Void
 
     // MARK: Methods
 
@@ -53,7 +53,7 @@ public struct SplitControllerFactory<VC: UISplitViewController, C>: ContainerFac
                 delegate: UISplitViewControllerDelegate? = nil,
                 presentsWithGesture: Bool? = nil,
                 preferredDisplayMode: UISplitViewController.DisplayMode? = nil,
-                configuration: ((_: VC) -> Void)? = nil) {
+                configuration: @escaping @MainActor (VC) -> Void = { _ in }) {
         self.nibName = nibNameOrNil
         self.bundle = nibBundleOrNil
         self.delegate = delegate
@@ -76,9 +76,7 @@ public struct SplitControllerFactory<VC: UISplitViewController, C>: ContainerFac
         if let preferredDisplayMode {
             splitViewController.preferredDisplayMode = preferredDisplayMode
         }
-        if let configuration {
-            configuration(splitViewController)
-        }
+        configuration(splitViewController)
         return splitViewController
     }
 

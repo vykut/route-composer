@@ -29,7 +29,7 @@ struct InterceptorMultiplexer: AnyRoutingInterceptor, CustomStringConvertible {
         }
     }
 
-    func perform(with context: AnyContext, completion: @escaping (RoutingResult) -> Void) {
+    func perform(with context: AnyContext, completion: @escaping @MainActor (RoutingResult) -> Void) {
         guard !self.interceptors.isEmpty else {
             completion(.success)
             return

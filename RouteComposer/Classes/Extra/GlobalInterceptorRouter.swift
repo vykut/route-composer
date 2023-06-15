@@ -39,7 +39,7 @@ public struct GlobalInterceptorRouter<R>: Router where R: Router {
     public func navigate<Context>(to step: DestinationStep<some UIViewController, Context>,
                                   with context: Context,
                                   animated: Bool,
-                                  completion: ((RoutingResult) -> Void)?) throws {
+                                  completion: @escaping @MainActor (RoutingResult) -> Void) throws {
         do {
             let interceptorRunner = try DefaultRouter.InterceptorRunner(interceptors: interceptors, with: AnyContextBox(context))
             interceptorRunner.perform(completion: { result in
@@ -47,13 +47,13 @@ public struct GlobalInterceptorRouter<R>: Router where R: Router {
                     switch result {
                     case .success:
                         try router.navigate(to: step, with: context, animated: animated, completion: { result in
-                            completion?(result)
+                            completion(result)
                         })
                     case let .failure(error):
                         throw error
                     }
                 } catch {
-                    completion?(.failure(error))
+                    completion(.failure(error))
                 }
             })
         } catch {

@@ -48,7 +48,7 @@ public struct DefaultStackPresentationHandler: StackPresentationHandler {
                   containerAdapterLocator: defaults.containerAdapterLocator)
     }
 
-    public func dismissPresented(from viewController: UIViewController, animated: Bool, completion: @escaping (_: RoutingResult) -> Void) {
+    public func dismissPresented(from viewController: UIViewController, animated: Bool, completion: @escaping @MainActor (RoutingResult) -> Void) {
         if let presentedController = viewController.presentedViewController {
             if !presentedController.isBeingDismissed {
                 viewController.dismiss(animated: animated) {
@@ -65,10 +65,10 @@ public struct DefaultStackPresentationHandler: StackPresentationHandler {
 
     public func makeVisibleInParentContainers(_ viewController: UIViewController,
                                               animated: Bool,
-                                              completion: @escaping (RoutingResult) -> Void) {
+                                              completion: @escaping @MainActor (RoutingResult) -> Void) {
         var parentViewControllers = viewController.allParents
         let topParentViewController = parentViewControllers.last
-        func makeVisible(viewController: UIViewController, completion: @escaping (RoutingResult) -> Void) {
+        func makeVisible(viewController: UIViewController, completion: @escaping @MainActor (RoutingResult) -> Void) {
             guard !parentViewControllers.isEmpty else {
                 if !animated,
                    let topParentViewController,

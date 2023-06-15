@@ -29,7 +29,7 @@ public protocol Router {
     func navigate<ViewController: UIViewController, Context>(to step: DestinationStep<ViewController, Context>,
                                                              with context: Context,
                                                              animated: Bool,
-                                                             completion: ((_: RoutingResult) -> Void)?) throws
+                                                             completion: @escaping @MainActor (RoutingResult) -> Void) throws
 
 }
 
@@ -45,7 +45,7 @@ public extension Router {
     ///   - completion: completion block.
     func navigate(to step: DestinationStep<some UIViewController, Any?>,
                   animated: Bool,
-                  completion: ((_: RoutingResult) -> Void)?) throws {
+                  completion: @escaping @MainActor (RoutingResult) -> Void) throws {
         try navigate(to: step, with: nil, animated: animated, completion: completion)
     }
 
@@ -57,7 +57,7 @@ public extension Router {
     ///   - completion: completion block.
     func navigate(to step: DestinationStep<some UIViewController, Void>,
                   animated: Bool,
-                  completion: ((_: RoutingResult) -> Void)?) throws {
+                  completion: @escaping @MainActor (RoutingResult) -> Void = { _ in }) throws {
         try navigate(to: step, with: (), animated: animated, completion: completion)
     }
 
@@ -78,11 +78,11 @@ public extension Router {
     func commitNavigation<Context>(to step: DestinationStep<some UIViewController, Context>,
                                    with context: Context,
                                    animated: Bool,
-                                   completion: ((RoutingResult) -> Void)?) {
+                                   completion: @escaping @MainActor (RoutingResult) -> Void = { _ in }) {
         do {
             try navigate(to: step, with: context, animated: animated, completion: completion)
         } catch {
-            completion?(.failure(error))
+            completion(.failure(error))
         }
     }
 
@@ -95,7 +95,7 @@ public extension Router {
     ///   - completion: completion block.
     func commitNavigation(to step: DestinationStep<some UIViewController, Any?>,
                           animated: Bool,
-                          completion: ((RoutingResult) -> Void)?) {
+                          completion: @escaping @MainActor (RoutingResult) -> Void = { _ in }) {
         commitNavigation(to: step, with: nil, animated: animated, completion: completion)
     }
 
@@ -108,7 +108,7 @@ public extension Router {
     ///   - completion: completion block.
     func commitNavigation(to step: DestinationStep<some UIViewController, Void>,
                           animated: Bool,
-                          completion: ((RoutingResult) -> Void)?) {
+                          completion: @escaping @MainActor (RoutingResult) -> Void = { _ in }) {
         commitNavigation(to: step, with: (), animated: animated, completion: completion)
     }
 

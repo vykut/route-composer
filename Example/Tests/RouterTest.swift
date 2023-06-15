@@ -363,7 +363,7 @@ class RouterTests: XCTestCase {
         let router: Router = DefaultRouter()
         var viewController: UIViewController? = UINavigationController()
         let screenConfigVoid = StepAssembly(finder: NilFinder<UIViewController, Void>(), factory: NilFactory())
-            .adding(InlineInterceptor { (_: Void, completion: @escaping (RoutingResult) -> Void) in
+            .adding(InlineInterceptor { (Void, completion: @escaping (RoutingResult) -> Void) in
                 viewController = nil
                 let deadline = DispatchTime.now() + .milliseconds(100)
                 DispatchQueue.main.asyncAfter(deadline: deadline) {
@@ -395,7 +395,7 @@ class RouterTests: XCTestCase {
         let screenConfigVoid = StepAssembly(finder: NilFinder<UIViewController, Void>(), factory: NilFactory())
             .from(DestinationStep(NoneStep()))
             .assemble()
-        XCTAssertThrowsError(try router.navigate(to: screenConfigVoid, animated: false, completion: nil))
+        XCTAssertThrowsError(try router.navigate(to: screenConfigVoid, animated: false, completion: { _ in }))
     }
 
     func testRouterWithAnyOrVoidContext() {
@@ -403,7 +403,7 @@ class RouterTests: XCTestCase {
         let screenConfigVoid = StepAssembly(finder: NilFinder<UIViewController, Void>(), factory: NilFactory())
             .from(GeneralStep.custom(using: NilFinder<UIViewController, Void>()))
             .assemble()
-        XCTAssertThrowsError(try router.navigate(to: screenConfigVoid, animated: false, completion: nil))
+        XCTAssertThrowsError(try router.navigate(to: screenConfigVoid, animated: false, completion: { _ in }))
         var wasInCompletion = false
         router.commitNavigation(to: screenConfigVoid, animated: false) { result in
             wasInCompletion = true
@@ -414,7 +414,7 @@ class RouterTests: XCTestCase {
         let screenConfigAny = StepAssembly(finder: NilFinder<UIViewController, Any?>(), factory: NilFactory())
             .from(GeneralStep.custom(using: NilFinder<UIViewController, Any?>()))
             .assemble()
-        XCTAssertThrowsError(try router.navigate(to: screenConfigAny, animated: false, completion: nil))
+        XCTAssertThrowsError(try router.navigate(to: screenConfigAny, animated: false, completion: { _ in }))
         wasInCompletion = false
         router.commitNavigation(to: screenConfigAny, animated: false) { result in
             wasInCompletion = true
@@ -425,7 +425,7 @@ class RouterTests: XCTestCase {
         let screenConfigString = StepAssembly(finder: NilFinder<UIViewController, String>(), factory: NilFactory())
             .from(GeneralStep.custom(using: NilFinder<UIViewController, String>()))
             .assemble()
-        XCTAssertThrowsError(try router.navigate(to: screenConfigAny, animated: false, completion: nil))
+        XCTAssertThrowsError(try router.navigate(to: screenConfigAny, animated: false, completion: { _ in }))
         wasInCompletion = false
         router.commitNavigation(to: screenConfigString, with: "test", animated: false) { result in
             wasInCompletion = true

@@ -35,7 +35,7 @@ public struct StoryboardFactory<VC: UIViewController, C>: Factory {
     public let identifier: String?
 
     /// The additional configuration block
-    public let configuration: ((_: VC) -> Void)?
+    public let configuration: @MainActor (VC) -> Void
 
     // MARK: Methods
 
@@ -48,7 +48,7 @@ public struct StoryboardFactory<VC: UIViewController, C>: Factory {
     ///     to create the storyboards initial `UIViewController`
     ///   - configuration: A block of code that will be used for the extended configuration of the created `UIViewController`. Can be used for
     ///                    a quick configuration instead of `ContextTask`.
-    public init(name: String, bundle: Bundle? = nil, identifier: String? = nil, configuration: ((_: VC) -> Void)? = nil) {
+    public init(name: String, bundle: Bundle? = nil, identifier: String? = nil, configuration: @escaping @MainActor (VC) -> Void = { _ in }) {
         self.name = name
         self.bundle = bundle
         self.identifier = identifier
@@ -67,9 +67,7 @@ public struct StoryboardFactory<VC: UIViewController, C>: Factory {
                                             .init("Unable to instantiate UIViewController with \(viewControllerID) identifier in \(name) storyboard " +
                                                 "as \(String(describing: type(of: VC.self))), got \(String(describing: instantiatedViewController)) instead."))
         }
-        if let configuration {
-            configuration(viewController)
-        }
+        configuration(viewController)
         return viewController
     }
 
@@ -85,9 +83,7 @@ public struct StoryboardFactory<VC: UIViewController, C>: Factory {
                                             .init("Unable to instantiate the initial UIViewController in \(name) storyboard " +
                                                 "as \(String(describing: type(of: VC.self))), got \(String(describing: abstractViewController)) instead."))
         }
-        if let configuration {
-            configuration(viewController)
-        }
+        configuration(viewController)
         return viewController
     }
 

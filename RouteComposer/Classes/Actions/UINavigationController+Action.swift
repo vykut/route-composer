@@ -54,7 +54,7 @@ public enum NavigationControllerActions {
         public func perform(with viewController: UIViewController,
                             on navigationController: ViewController,
                             animated: Bool,
-                            completion: @escaping (_: RoutingResult) -> Void) {
+                            completion: @escaping @MainActor (RoutingResult) -> Void) {
             navigationController.pushViewController(viewController, animated: animated)
             if let transitionCoordinator = navigationController.transitionCoordinator, animated {
                 transitionCoordinator.animate(alongsideTransition: nil) { _ in
@@ -85,7 +85,7 @@ public enum NavigationControllerActions {
         public func perform(with viewController: UIViewController,
                             on navigationController: ViewController,
                             animated: Bool,
-                            completion: @escaping (_: RoutingResult) -> Void) {
+                            completion: @escaping @MainActor (RoutingResult) -> Void) {
             navigationController.setViewControllers([viewController], animated: animated)
             if let transitionCoordinator = navigationController.transitionCoordinator, animated {
                 transitionCoordinator.animate(alongsideTransition: nil) { _ in
@@ -118,7 +118,7 @@ public enum NavigationControllerActions {
         public func perform(with viewController: UIViewController,
                             on navigationController: ViewController,
                             animated: Bool,
-                            completion: @escaping (_: RoutingResult) -> Void) {
+                            completion: @escaping @MainActor (RoutingResult) -> Void) {
             var viewControllers = navigationController.viewControllers
             perform(embedding: viewController, in: &viewControllers)
             navigationController.setViewControllers(viewControllers, animated: animated)

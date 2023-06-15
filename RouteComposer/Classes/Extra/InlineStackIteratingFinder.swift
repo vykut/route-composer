@@ -37,7 +37,7 @@ public struct InlineStackIteratingFinder<VC: UIViewController, C>: StackIteratin
     ///   - iterator: A `StackIterator` is to be used by `InlineStackIteratingFinder`
     ///   - inlineBock: A block to be called when `StackIteratingFinder.isTarget(...)` is requested.
     public init(iterator: StackIterator,
-                _ inlineBock: @escaping (VC, C) -> Bool) {
+                _ inlineBock: @escaping @MainActor (VC, C) -> Bool) {
         self.iterator = iterator
         self.inlineBock = inlineBock
     }
@@ -47,7 +47,7 @@ public struct InlineStackIteratingFinder<VC: UIViewController, C>: StackIteratin
     ///   - inlineBock: A block to be called when `StackIteratingFinder.isTarget(...)` is requested.
     ///
     ///   required due to https://github.com/apple/swift/issues/58177
-    public init(_ inlineBock: @escaping (VC, C) -> Bool) {
+    public init(_ inlineBock: @escaping @MainActor (VC, C) -> Bool) {
         self.init(iterator: RouteComposerDefaults.shared.stackIterator,
                   inlineBock)
     }
@@ -73,7 +73,7 @@ public extension InlineStackIteratingFinder {
          startingPoint: DefaultStackIterator.StartingPoint = .topmost,
          windowProvider: WindowProvider,
          containerAdapterLocator: ContainerAdapterLocator,
-         predicate inlineBock: @escaping (VC, C) -> Bool) {
+         predicate inlineBock: @escaping @MainActor (VC, C) -> Bool) {
         self.init(iterator: DefaultStackIterator(options: options,
                                                  startingPoint: startingPoint,
                                                  windowProvider: windowProvider,
@@ -91,7 +91,7 @@ public extension InlineStackIteratingFinder {
     ///   required due to https://github.com/apple/swift/issues/58177
     init(options: SearchOptions,
          startingPoint: DefaultStackIterator.StartingPoint = .topmost,
-         predicate inlineBock: @escaping (VC, C) -> Bool) {
+         predicate inlineBock: @escaping @MainActor (VC, C) -> Bool) {
         let defaults = RouteComposerDefaults.shared
         self.init(iterator: DefaultStackIterator(options: options,
                                                  startingPoint: startingPoint,

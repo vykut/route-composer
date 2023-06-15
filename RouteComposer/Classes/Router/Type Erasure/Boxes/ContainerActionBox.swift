@@ -27,7 +27,7 @@ struct ContainerActionBox<A: ContainerAction>: AnyAction, AnyActionBox, CustomSt
                  with postponedIntegrationHandler: PostponedActionIntegrationHandler,
                  nextAction: AnyAction?,
                  animated: Bool,
-                 completion: @escaping (RoutingResult) -> Void) {
+                 completion: @escaping @MainActor (RoutingResult) -> Void) {
         if let postponedController = postponedIntegrationHandler.containerViewController {
             guard postponedController is A.ViewController else {
                 postponedIntegrationHandler.purge(animated: animated, completion: { result in
@@ -76,7 +76,7 @@ struct ContainerActionBox<A: ContainerAction>: AnyAction, AnyActionBox, CustomSt
         }
     }
 
-    private func embed(viewController: UIViewController, with postponedIntegrationHandler: PostponedActionIntegrationHandler, completion: @escaping (RoutingResult) -> Void) {
+    private func embed(viewController: UIViewController, with postponedIntegrationHandler: PostponedActionIntegrationHandler, completion: @escaping @MainActor (RoutingResult) -> Void) {
         do {
             var postponedChildControllers = postponedIntegrationHandler.postponedViewControllers
             try perform(embedding: viewController, in: &postponedChildControllers)

@@ -36,8 +36,8 @@ class MultiplexerTest: XCTestCase {
         var multiplexer = InterceptorMultiplexer(interceptors)
         try? multiplexer.prepare(with: AnyContextBox(nil as Any?))
         XCTAssertEqual(prepareCountRun, 10)
-        XCTAssertEqual(multiplexer.description, "[InlineInterceptor<Optional<Any>>(prepareBlock: Optional((Function)), " +
-            "performBlock: (Function)), InlineInterceptor<Optional<Any>>(prepareBlock: Optional((Function)), " +
+        XCTAssertEqual(multiplexer.description, "[InlineInterceptor<Optional<Any>>(prepareBlock: (Function), " +
+            "performBlock: (Function)), InlineInterceptor<Optional<Any>>(prepareBlock: (Function), " +
             "performBlock: (Function))]")
     }
 
@@ -160,7 +160,7 @@ class MultiplexerTest: XCTestCase {
 
     func testPostTaskDescription() {
         let postTasks = [
-            PostRoutingTaskBox(InlinePostTask { (_: UIViewController, _: Int, _: [UIViewController]) in
+            PostRoutingTaskBox(InlinePostTask { (_: UIViewController,  _: Int, _: [UIViewController]) in
             })
         ]
 

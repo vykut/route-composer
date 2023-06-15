@@ -22,7 +22,7 @@ public struct InlineContextTask<VC: UIViewController, C>: ContextTask {
 
     // MARK: Properties
 
-    private let completion: (_: VC, _: C) throws -> Void
+    private let completion: (VC, C) throws -> Void
 
     // MARK: Methods
 
@@ -30,7 +30,7 @@ public struct InlineContextTask<VC: UIViewController, C>: ContextTask {
     ///
     /// - Parameter completion: the block to be called when `InlineContextTask` will be applied to the `UIViewController`
     ///    instance.
-    public init(_ completion: @escaping (_: VC, _: C) throws -> Void) {
+    public init(_ completion: @escaping @MainActor (VC, C) throws -> Void) {
         self.completion = completion
     }
 

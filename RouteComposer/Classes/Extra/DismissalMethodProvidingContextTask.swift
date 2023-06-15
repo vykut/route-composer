@@ -22,7 +22,7 @@ public struct DismissalMethodProvidingContextTask<VC: Dismissible, C>: ContextTa
 
     // MARK: Properties
 
-    let dismissalBlock: (_: VC, _: VC.DismissalTargetContext, _: Bool, _: ((_: RoutingResult) -> Void)?) -> Void
+    let dismissalBlock: (VC, VC.DismissalTargetContext, Bool, ((RoutingResult) -> Void)?) -> Void
 
     // MARK: Methods
 
@@ -30,7 +30,7 @@ public struct DismissalMethodProvidingContextTask<VC: Dismissible, C>: ContextTa
     ///
     /// - Parameter dismissalBlock: Block that will trigger the dismissal process when `Dismissible` `UIViewController` calls
     ///    `Dismissible.dismissViewController(...)` method.
-    public init(dismissalBlock: @escaping (_: VC, _: VC.DismissalTargetContext, _: Bool, _: ((_: RoutingResult) -> Void)?) -> Void) {
+    public init(dismissalBlock: @escaping @MainActor (VC, VC.DismissalTargetContext, Bool, ((RoutingResult) -> Void)?) -> Void) {
         self.dismissalBlock = dismissalBlock
     }
 

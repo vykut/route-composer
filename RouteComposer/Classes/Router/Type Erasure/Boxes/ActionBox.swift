@@ -27,7 +27,7 @@ struct ActionBox<A: Action>: AnyAction, AnyActionBox, CustomStringConvertible {
                  with postponedIntegrationHandler: PostponedActionIntegrationHandler,
                  nextAction: AnyAction?,
                  animated: Bool,
-                 completion: @escaping (RoutingResult) -> Void) {
+                 completion: @escaping @MainActor (RoutingResult) -> Void) {
         guard let typedExistingViewController = existingController as? A.ViewController else {
             completion(.failure(RoutingError.typeMismatch(type: type(of: existingController),
                                                           expectedType: ActionType.ViewController.self,

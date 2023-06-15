@@ -217,7 +217,7 @@ class ContainerTests: XCTestCase {
         children.append(PostponedIntegrationFactory(for: FactoryBox(EmptyFactory(), action: ContainerActionBox(UITabBarController.add()))!))
         try? prepare(children: &children)
         let factory = CompleteFactory(factory: TabBarControllerFactory<UITabBarController, Any?>(), childFactories: children)
-        XCTAssertEqual(factory.description, "TabBarControllerFactory<UITabBarController, Optional<Any>>(nibName: nil, bundle: nil, delegate: nil, configuration: nil)")
+        XCTAssertEqual(factory.description, "TabBarControllerFactory<UITabBarController, Optional<Any>>(nibName: nil, bundle: nil, delegate: nil, configuration: (Function))")
     }
 
     private func prepare(children: inout [PostponedIntegrationFactory]) throws {

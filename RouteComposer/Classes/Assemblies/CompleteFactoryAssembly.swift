@@ -29,7 +29,7 @@ public final class CompleteFactoryAssembly<FC: ContainerFactory> {
 
     struct SimpleAddAction<FC: ContainerFactory>: ContainerAction {
 
-        func perform(with viewController: UIViewController, on existingController: FC.ViewController, animated: Bool, completion: @escaping (RoutingResult) -> Void) {
+        func perform(with viewController: UIViewController, on existingController: FC.ViewController, animated: Bool, completion: @escaping @MainActor (RoutingResult) -> Void) {
             assertionFailure("Should never be called")
             completion(.success)
         }

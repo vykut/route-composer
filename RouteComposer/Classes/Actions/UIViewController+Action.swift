@@ -59,7 +59,7 @@ public enum GeneralAction {
                                       transitioningDelegate: UIViewControllerTransitioningDelegate? = nil,
                                       preferredContentSize: CGSize? = nil,
                                       isModalInPresentation: Bool? = nil,
-                                      popoverConfiguration: ((_: UIPopoverPresentationController) -> Void)? = nil) -> ViewControllerActions.PresentModallyAction {
+                                      popoverConfiguration: @escaping @MainActor (UIPopoverPresentationController) -> Void = { _ in }) -> ViewControllerActions.PresentModallyAction {
         ViewControllerActions.PresentModallyAction(startingFrom: presentationStartingPoint,
                                                    presentationStyle: presentationStyle,
                                                    transitionStyle: transitionStyle,
@@ -96,7 +96,7 @@ public enum ViewControllerActions {
             case topmostParent
 
             /// Present from the custom `UIViewController`
-            case custom(@autoclosure () throws -> UIViewController?)
+            case custom(@autoclosure @MainActor () throws -> UIViewController?)
 
         }
 
@@ -118,7 +118,7 @@ public enum ViewControllerActions {
         public let preferredContentSize: CGSize?
 
         /// Block to configure `UIPopoverPresentationController`
-        public let popoverControllerConfigurationBlock: ((_: UIPopoverPresentationController) -> Void)?
+        public let popoverControllerConfigurationBlock: @MainActor (UIPopoverPresentationController) -> Void
 
         /// `UIViewControllerTransitioningDelegate` instance to be used during the transition
         public private(set) weak var transitioningDelegate: UIViewControllerTransitioningDelegate?
@@ -141,7 +141,7 @@ public enum ViewControllerActions {
              transitioningDelegate: UIViewControllerTransitioningDelegate? = nil,
              preferredContentSize: CGSize? = nil,
              isModalInPresentation: Bool? = nil,
-             popoverConfiguration: ((_: UIPopoverPresentationController) -> Void)? = nil) {
+             popoverConfiguration: @escaping @MainActor (UIPopoverPresentationController) -> Void = { _ in }) {
             self.presentationStartingPoint = presentationStartingPoint
             self.presentationStyle = presentationStyle
             self.transitionStyle = transitionStyle
@@ -154,7 +154,7 @@ public enum ViewControllerActions {
         public func perform(with viewController: UIViewController,
                             on existingController: UIViewController,
                             animated: Bool,
-                            completion: @escaping (_: RoutingResult) -> Void) {
+                            completion: @MainActor @escaping (RoutingResult) -> Void) {
 
             let presentingViewController: UIViewController
             switch presentationStartingPoint {
@@ -188,8 +188,7 @@ public enum ViewControllerActions {
             if let preferredContentSize {
                 viewController.preferredContentSize = preferredContentSize
             }
-            if let popoverPresentationController = viewController.popoverPresentationController,
-               let popoverControllerConfigurationBlock {
+            if let popoverPresentationController = viewController.popoverPresentationController {
                 popoverControllerConfigurationBlock(popoverPresentationController)
             }
             if #available(iOS 13, *),
@@ -236,7 +235,7 @@ public enum ViewControllerActions {
         public func perform(with viewController: UIViewController,
                             on existingController: UIViewController,
                             animated: Bool,
-                            completion: @escaping (_: RoutingResult) -> Void) {
+                            completion: @escaping @MainActor (RoutingResult) -> Void) {
             guard let window = windowProvider.window else {
                 completion(.failure(RoutingError.compositionFailed(.init("Window was not found."))))
                 return

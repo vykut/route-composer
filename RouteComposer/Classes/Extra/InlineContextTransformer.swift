@@ -28,7 +28,7 @@ public final class InlineContextTransformer<SourceContext, TargetContext>: Conte
     /// Constructor
     ///
     /// - Parameter transformationBlock: the block to be called when it requested to transform the context.
-    public init(_ transformationBlock: @escaping (SourceContext) throws -> TargetContext) {
+    public init(_ transformationBlock: @escaping @MainActor (SourceContext) throws -> TargetContext) {
         self.transformationBlock = transformationBlock
     }
 

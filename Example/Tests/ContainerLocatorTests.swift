@@ -33,11 +33,11 @@ class ContainerLocatorTests: XCTestCase {
 
         let visibleViewControllers: [UIViewController] = []
 
-        func makeVisible(_ viewController: UIViewController, animated: Bool, completion: @escaping (_: RoutingResult) -> Void) {
+        func makeVisible(_ viewController: UIViewController, animated: Bool, completion: @escaping (RoutingResult) -> Void) {
             completion(.success)
         }
 
-        func setContainedViewControllers(_ containedViewControllers: [UIViewController], animated: Bool, completion: @escaping (_: RoutingResult) -> Void) {
+        func setContainedViewControllers(_ containedViewControllers: [UIViewController], animated: Bool, completion: @escaping (RoutingResult) -> Void) {
             completion(.success)
         }
 

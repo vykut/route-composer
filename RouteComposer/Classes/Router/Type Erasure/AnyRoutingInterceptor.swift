@@ -18,6 +18,6 @@ protocol AnyRoutingInterceptor {
 
     mutating func prepare(with context: AnyContext) throws
 
-    func perform(with context: AnyContext, completion: @escaping (_: RoutingResult) -> Void)
+    func perform(with context: AnyContext, completion: @escaping @MainActor (RoutingResult) -> Void)
 
 }

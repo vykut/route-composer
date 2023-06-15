@@ -35,7 +35,7 @@ public struct TabBarControllerFactory<VC: UITabBarController, C>: ContainerFacto
     public private(set) weak var delegate: UITabBarControllerDelegate?
 
     /// The additional configuration block
-    public let configuration: ((_: VC) -> Void)?
+    public let configuration: @MainActor (VC) -> Void
 
     // MARK: Methods
 
@@ -43,7 +43,7 @@ public struct TabBarControllerFactory<VC: UITabBarController, C>: ContainerFacto
     public init(nibName nibNameOrNil: String? = nil,
                 bundle nibBundleOrNil: Bundle? = nil,
                 delegate: UITabBarControllerDelegate? = nil,
-                configuration: ((_: VC) -> Void)? = nil) {
+                configuration: @escaping @MainActor (VC) -> Void = { _ in }) {
         self.nibName = nibNameOrNil
         self.bundle = nibBundleOrNil
         self.delegate = delegate
@@ -58,9 +58,7 @@ public struct TabBarControllerFactory<VC: UITabBarController, C>: ContainerFacto
         if !coordinator.isEmpty {
             tabBarController.viewControllers = try coordinator.build(integrating: tabBarController.viewControllers ?? [])
         }
-        if let configuration {
-            configuration(tabBarController)
-        }
+        configuration(tabBarController)
         return tabBarController
     }
 

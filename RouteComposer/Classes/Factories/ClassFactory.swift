@@ -31,7 +31,7 @@ public struct ClassFactory<VC: UIViewController, C>: Factory {
     public let bundle: Bundle?
 
     /// The additional configuration block
-    public let configuration: ((_: VC) -> Void)?
+    public let configuration: @MainActor (VC) -> Void
 
     // MARK: Methods
 
@@ -42,7 +42,7 @@ public struct ClassFactory<VC: UIViewController, C>: Factory {
     ///   - nibBundleOrNil: A `Bundle` instance if needed
     ///   - configuration: A block of code that will be used for the extended configuration of the created `UIViewController`. Can be used for
     ///                    a quick configuration instead of `ContextTask`.
-    public init(nibName nibNameOrNil: String? = nil, bundle nibBundleOrNil: Bundle? = nil, configuration: ((_: VC) -> Void)? = nil) {
+    public init(nibName nibNameOrNil: String? = nil, bundle nibBundleOrNil: Bundle? = nil, configuration: @escaping @MainActor (VC) -> Void = { _ in }) {
         self.nibName = nibNameOrNil
         self.bundle = nibBundleOrNil
         self.configuration = configuration
@@ -50,9 +50,7 @@ public struct ClassFactory<VC: UIViewController, C>: Factory {
 
     public func build(with context: C) throws -> VC {
         let viewController = VC(nibName: nibName, bundle: bundle)
-        if let configuration {
-            configuration(viewController)
-        }
+        configuration(viewController)
         return viewController
     }
 

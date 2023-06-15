@@ -20,11 +20,11 @@ protocol PostponedActionIntegrationHandler: AnyObject {
 
     var postponedViewControllers: [UIViewController] { get }
 
-    func update(containerViewController: ContainerViewController, animated: Bool, completion: @escaping (_: RoutingResult) -> Void)
+    func update(containerViewController: ContainerViewController, animated: Bool, completion: @escaping @MainActor (RoutingResult) -> Void)
 
     func update(postponedViewControllers: [UIViewController])
 
-    func purge(animated: Bool, completion: @escaping (_: RoutingResult) -> Void)
+    func purge(animated: Bool, completion: @escaping @MainActor (RoutingResult) -> Void)
 
 }
 
@@ -36,7 +36,7 @@ protocol AnyAction {
                  with postponedIntegrationHandler: PostponedActionIntegrationHandler,
                  nextAction: AnyAction?,
                  animated: Bool,
-                 completion: @escaping (_: RoutingResult) -> Void)
+                 completion: @escaping @MainActor (RoutingResult) -> Void)
 
     func perform(embedding viewController: UIViewController,
                  in childViewControllers: inout [UIViewController]) throws

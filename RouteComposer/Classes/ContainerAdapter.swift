@@ -46,7 +46,7 @@ public protocol ContainerAdapter {
     /// - Parameters:
     ///   - viewController: The `UIViewController` to make active (visible).
     ///   - animated: If `ContainerViewController` is able to do so - make container active animated or not.
-    func makeVisible(_ viewController: UIViewController, animated: Bool, completion: @escaping (_: RoutingResult) -> Void)
+    func makeVisible(_ viewController: UIViewController, animated: Bool, completion: @escaping @MainActor (RoutingResult) -> Void)
 
     /// Each container view controller adapter should implement this method for the `Router` to know how to replace all the
     /// view controllers in this particular container view controller.
@@ -56,7 +56,7 @@ public protocol ContainerAdapter {
     /// - Parameters:
     ///   - containedViewControllers: A `UIViewController` instances to replace.
     ///   - animated: If `ContainerViewController` is able to do so - replace contained view controllers animated or not.
-    func setContainedViewControllers(_ containedViewControllers: [UIViewController], animated: Bool, completion: @escaping (_: RoutingResult) -> Void)
+    func setContainedViewControllers(_ containedViewControllers: [UIViewController], animated: Bool, completion: @escaping @MainActor (RoutingResult) -> Void)
 
 }
 

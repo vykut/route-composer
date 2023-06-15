@@ -83,10 +83,10 @@ class ExtrasTest: XCTestCase {
             globalInterceptorRun += 1
             completion(.success)
         }))
-        router.add(InlineContextTask { (_: UIViewController, _: Any?) in
+        router.add(InlineContextTask { (UIViewController, _: Any?) in
             globalTaskRun += 1
         })
-        router.add(InlinePostTask { (_: UIViewController, _: Any?, viewControllers: [UIViewController]) in
+        router.add(InlinePostTask { (UIViewController, _: Any?, viewControllers: [UIViewController]) in
             globalPostTaskRun += 1
             XCTAssertEqual(viewControllers.count, 3)
         })
@@ -114,10 +114,7 @@ class ExtrasTest: XCTestCase {
 
     func testSingleNavigationRouterThrowingException() {
         class FaultyTestRouter: Router {
-            func navigate<Context>(to step: DestinationStep<some UIViewController, Context>,
-                                   with context: Context,
-                                   animated: Bool,
-                                   completion: ((RoutingResult) -> Void)?) throws {
+            func navigate<ViewController, Context>(to step: RouteComposer.DestinationStep<ViewController, Context>, with context: Context, animated: Bool, completion: @escaping @MainActor (RouteComposer.RoutingResult) -> Void) throws where ViewController : UIViewController {
                 throw RoutingError.generic(.init("Test"))
             }
         }
@@ -158,7 +155,7 @@ class ExtrasTest: XCTestCase {
 
     func testDismissalMethodProvidingContextTask() {
         class DismissingViewController<C>: UIViewController, Dismissible {
-            var dismissalBlock: ((DismissingViewController<C>, C, Bool, ((RoutingResult) -> Void)?) -> Void)?
+            var dismissalBlock: @MainActor (DismissingViewController<C>, C, Bool, @escaping @MainActor (RouteComposer.RoutingResult) -> Void) -> Void = { _,_,_,_  in }
         }
 
         let viewControllerVoid = DismissingViewController<Void>()
@@ -192,7 +189,7 @@ class ExtrasTest: XCTestCase {
             wasInCompletion = true
         }
         XCTAssertNotNil(viewController.dismissalBlock)
-        viewController.dismissalBlock?(viewController, (), true, nil)
+        viewController.dismissalBlock(viewController, (), true, { _ in })
         XCTAssertEqual(wasInCompletion, true)
     }
 
@@ -264,23 +261,15 @@ class ExtrasTest: XCTestCase {
 
     func testRouterNavigationToDestination() {
         class TestRouter: Router {
-            func navigate<Context>(to step: DestinationStep<some UIViewController, Context>,
-                                   with context: Context,
-                                   animated: Bool,
-                                   completion: ((RoutingResult) -> Void)?) throws {
+            func navigate<ViewController, Context>(to step: RouteComposer.DestinationStep<ViewController, Context>, with context: Context, animated: Bool, completion: @escaping @MainActor (RouteComposer.RoutingResult) -> Void) throws where ViewController : UIViewController {
                 XCTAssertTrue(animated)
-                XCTAssertNotNil(completion)
-                completion?(.success)
+                completion(.success)
             }
         }
 
         class FaultyTestRouter: Router {
-            func navigate<Context>(to step: DestinationStep<some UIViewController, Context>,
-                                   with context: Context,
-                                   animated: Bool,
-                                   completion: ((RoutingResult) -> Void)?) throws {
+            func navigate<ViewController, Context>(to step: RouteComposer.DestinationStep<ViewController, Context>, with context: Context, animated: Bool, completion: @escaping @MainActor (RouteComposer.RoutingResult) -> Void) throws where ViewController : UIViewController {
                 XCTAssertFalse(animated)
-                XCTAssertNotNil(completion)
                 throw RoutingError.generic(.init("Test"))
             }
         }

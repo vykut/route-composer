@@ -22,7 +22,7 @@ public struct InlinePostTask<VC: UIViewController, C>: PostRoutingTask {
 
     // MARK: Properties
 
-    private let completion: (_: VC, _: C, _: [UIViewController]) -> Void
+    private let completion: (VC, C, [UIViewController]) -> Void
 
     // MARK: Methods
 
@@ -30,7 +30,7 @@ public struct InlinePostTask<VC: UIViewController, C>: PostRoutingTask {
     ///
     /// - Parameter completion: the block to be called when `InlinePostTask` will be called at the end of the navigation process
     ///   process.
-    public init(_ completion: @escaping (_: VC, _: C, _: [UIViewController]) -> Void) {
+    public init(_ completion: @escaping @MainActor (VC, C, [UIViewController]) -> Void) {
         self.completion = completion
     }
 

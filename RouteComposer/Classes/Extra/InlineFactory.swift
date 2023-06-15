@@ -32,7 +32,7 @@ public struct InlineFactory<VC: UIViewController, C>: Factory {
 
     /// Constructor
     /// - Parameter inlineBock: the block to be called when `InlineFactory.build(...)` is requested.
-    public init(viewController inlineBock: @autoclosure @escaping () throws -> VC) {
+    public init(viewController inlineBock: @autoclosure @escaping @MainActor () throws -> VC) {
         self.inlineBock = { _ in
             try inlineBock()
         }
@@ -40,7 +40,7 @@ public struct InlineFactory<VC: UIViewController, C>: Factory {
 
     /// Constructor
     /// - Parameter inlineBock: the block to be called when `InlineFactory.build(...)` is requested.
-    public init(_ inlineBock: @escaping (C) throws -> VC) {
+    public init(_ inlineBock: @escaping @MainActor (C) throws -> VC) {
         self.inlineBock = inlineBock
     }
 

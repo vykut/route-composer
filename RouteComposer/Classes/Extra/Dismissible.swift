@@ -27,7 +27,7 @@ public protocol Dismissible where Self: UIViewController {
     // MARK: Properties to implement
 
     /// Property to store the dismissal block provided by `DismissalMethodProvidingContextTask`
-    var dismissalBlock: ((_: Self, _: DismissalTargetContext, _: Bool, _: ((_: RoutingResult) -> Void)?) -> Void)? { get set }
+    var dismissalBlock: @MainActor (Self, DismissalTargetContext, Bool, @escaping @MainActor (RoutingResult) -> Void) -> Void { get set }
 
 }
 
@@ -41,13 +41,7 @@ public extension Dismissible {
     ///   - context: `DismissalTargetContext` required to be dismissed.
     ///   - animated: Dismissal process should be animated if set to `true`
     ///   - completion: The completion block.
-    func dismissViewController(with context: DismissalTargetContext, animated: Bool, completion: ((_: RoutingResult) -> Void)? = nil) {
-        guard let dismissalBlock else {
-            let message = "Dismissal block has not been set."
-            assertionFailure(message)
-            completion?(.failure(RoutingError.compositionFailed(.init(message))))
-            return
-        }
+    func dismissViewController(with context: DismissalTargetContext, animated: Bool, completion: @escaping @MainActor (RoutingResult) -> Void = { _ in }) {
         dismissalBlock(self, context, animated, completion)
     }
 
@@ -62,7 +56,7 @@ public extension Dismissible where DismissalTargetContext == Any? {
     /// - Parameters:
     ///   - animated: Dismissal process should be animated if set to `true`
     ///   - completion: The completion block.
-    func dismissViewController(animated: Bool, completion: ((_: RoutingResult) -> Void)? = nil) {
+    func dismissViewController(animated: Bool, completion: @escaping @MainActor (RoutingResult) -> Void = { _ in }) {
         dismissViewController(with: nil, animated: animated, completion: completion)
     }
 
@@ -77,7 +71,7 @@ public extension Dismissible where DismissalTargetContext == Void {
     /// - Parameters:
     ///   - animated: Dismissal process should be animated if set to `true`
     ///   - completion: The completion block.
-    func dismissViewController(animated: Bool, completion: ((_: RoutingResult) -> Void)? = nil) {
+    func dismissViewController(animated: Bool, completion: @escaping @MainActor (RoutingResult) -> Void = { _ in }) {
         dismissViewController(with: (), animated: animated, completion: completion)
     }
 
@@ -90,9 +84,11 @@ public protocol DismissibleWithRuntimeStorage: Dismissible {}
 
 public extension DismissibleWithRuntimeStorage {
 
-    var dismissalBlock: ((_: Self, _: DismissalTargetContext, _: Bool, _: ((_: RoutingResult) -> Void)?) -> Void)? {
+    var dismissalBlock: @MainActor (Self, DismissalTargetContext, Bool, @escaping @MainActor (RoutingResult) -> Void) -> Void {
         get {
-            objc_getAssociatedObject(self, &associatedObjectHandle) as? (_: Self, _: DismissalTargetContext, _: Bool, _: ((_: RoutingResult) -> Void)?) -> Void
+            objc_getAssociatedObject(self, &associatedObjectHandle) as? (@MainActor (Self, DismissalTargetContext, Bool, @escaping @MainActor (RoutingResult) -> Void) -> Void) ?? { _,_,_, completion in
+                completion(.failure(RoutingError.generic(.init("Could not retrieve object from runtime storage"))))
+            }
         }
         set {
             objc_setAssociatedObject(self, &associatedObjectHandle, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)

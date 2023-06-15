@@ -81,7 +81,7 @@ public struct NavigationDelayingInterceptor<Context>: RoutingInterceptor {
                   logger: defaults.logger)
     }
 
-    public func perform(with context: Context, completion: @escaping (RoutingResult) -> Void) {
+    public func perform(with context: Context, completion: @escaping @MainActor (RoutingResult) -> Void) {
         guard let topmostViewController = getTopmostViewController(),
               topmostViewController.isBeingDismissed || topmostViewController.isBeingPresented else {
             completion(.success)

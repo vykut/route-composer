@@ -27,7 +27,7 @@ public struct FinderFactory<F: Finder>: Factory {
     // MARK: Properties
 
     /// The additional configuration block
-    public let configuration: ((_: F.ViewController) -> Void)?
+    public let configuration: @MainActor (F.ViewController) -> Void
 
     private let finder: F
 
@@ -37,7 +37,7 @@ public struct FinderFactory<F: Finder>: Factory {
     ///
     /// - Parameters:
     ///   - finder: The `Finder` instance to be used by the `Factory`
-    public init?(finder: F, configuration: ((_: F.ViewController) -> Void)? = nil) {
+    public init?(finder: F, configuration: @escaping @MainActor (F.ViewController) -> Void = { _ in }) {
         guard !(finder is NilEntity) else {
             return nil
         }
@@ -49,9 +49,7 @@ public struct FinderFactory<F: Finder>: Factory {
         guard let viewController = try finder.findViewController(with: context) else {
             throw RoutingError.compositionFailed(.init("\(String(describing: finder)) hasn't found its view controller in the stack."))
         }
-        if let configuration {
-            configuration(viewController)
-        }
+        configuration(viewController)
         return viewController
     }
 

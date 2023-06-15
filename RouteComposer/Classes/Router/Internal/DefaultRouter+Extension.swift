@@ -34,7 +34,7 @@ extension DefaultRouter {
             interceptors.append((interceptor: interceptor, context: context))
         }
 
-        func perform(completion: @escaping (_: RoutingResult) -> Void) {
+        func perform(completion: @escaping (RoutingResult) -> Void) {
             guard !interceptors.isEmpty else {
                 completion(.success)
                 return
@@ -223,7 +223,7 @@ extension DefaultRouter {
             return StepTaskTaskRunner(contextTaskRunner: contextTaskRunner, postTaskRunner: postTaskRunner, context: context)
         }
 
-        final func performInterceptors(completion: @escaping (_: RoutingResult) -> Void) {
+        final func performInterceptors(completion: @escaping (RoutingResult) -> Void) {
             interceptorRunner.perform(completion: completion)
         }
 
@@ -288,7 +288,7 @@ extension DefaultRouter {
             self.containerAdapterLocator = containerAdapterLocator
         }
 
-        final func update(containerViewController: ContainerViewController, animated: Bool, completion: @escaping (_: RoutingResult) -> Void) {
+        final func update(containerViewController: ContainerViewController, animated: Bool, completion: @escaping @MainActor (RoutingResult) -> Void) {
             do {
                 guard self.containerViewController == nil else {
                     purge(animated: animated, completion: { result in
@@ -313,7 +313,7 @@ extension DefaultRouter {
             self.postponedViewControllers = postponedViewControllers
         }
 
-        final func purge(animated: Bool, completion: @escaping (_: RoutingResult) -> Void) {
+        final func purge(animated: Bool, completion: @escaping @MainActor (RoutingResult) -> Void) {
             do {
                 guard let containerViewController else {
                     completion(.success)

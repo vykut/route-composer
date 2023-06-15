@@ -47,9 +47,9 @@ public final class SwitchAssembly<ViewController: UIViewController, Context> {
     @MainActor
     private struct BlockResolver: StepCaseResolver {
 
-        let resolverBlock: (_: Context) -> DestinationStep<ViewController, Context>?
+        let resolverBlock: (Context) -> DestinationStep<ViewController, Context>?
 
-        init(resolverBlock: @escaping (_: Context) -> DestinationStep<ViewController, Context>?) {
+        init(resolverBlock: @escaping @MainActor (Context) -> DestinationStep<ViewController, Context>?) {
             self.resolverBlock = resolverBlock
         }
 
@@ -94,7 +94,7 @@ public final class SwitchAssembly<ViewController: UIViewController, Context> {
     /// Returning nil from the block will mean that it has not succeeded.
     ///
     /// - Parameter resolverBlock: case resolver block
-    public final func addCase(_ resolverBlock: @escaping (_: Context) -> DestinationStep<ViewController, Context>?) -> Self {
+    public final func addCase(_ resolverBlock: @escaping @MainActor (Context) -> DestinationStep<ViewController, Context>?) -> Self {
         resolvers.append(BlockResolver(resolverBlock: resolverBlock))
         return self
     }
@@ -115,7 +115,7 @@ public final class SwitchAssembly<ViewController: UIViewController, Context> {
     /// - Parameters:
     ///   - condition: A condition to use the provided step.
     ///   - step: The `DestinationStep` is to perform.
-    public final func addCase(when condition: @autoclosure @escaping () -> Bool, from step: DestinationStep<ViewController, Context>) -> Self {
+    public final func addCase(when condition: @autoclosure @escaping @MainActor () -> Bool, from step: DestinationStep<ViewController, Context>) -> Self {
         resolvers.append(BlockResolver(resolverBlock: { _ in
             guard condition() else {
                 return nil
@@ -130,7 +130,7 @@ public final class SwitchAssembly<ViewController: UIViewController, Context> {
     /// - Parameters:
     ///   - conditionBlock: A condition to use the provided step.
     ///   - step: The `DestinationStep` is to perform.
-    public final func addCase(when conditionBlock: @escaping (Context) -> Bool, from step: DestinationStep<ViewController, Context>) -> Self {
+    public final func addCase(when conditionBlock: @escaping @MainActor (Context) -> Bool, from step: DestinationStep<ViewController, Context>) -> Self {
         resolvers.append(BlockResolver(resolverBlock: { context in
             guard conditionBlock(context) else {
                 return nil
@@ -161,7 +161,7 @@ public final class SwitchAssembly<ViewController: UIViewController, Context> {
     ///
     /// - Parameter resolverBlock: default resolver block
     /// - Returns: an instance of `DestinationStep`
-    public final func assemble(default resolverBlock: @escaping () -> DestinationStep<ViewController, Context>) -> DestinationStep<ViewController, Context> {
+    public final func assemble(default resolverBlock: @escaping @MainActor () -> DestinationStep<ViewController, Context>) -> DestinationStep<ViewController, Context> {
         resolvers.append(BlockResolver(resolverBlock: { _ in
             resolverBlock()
         }))

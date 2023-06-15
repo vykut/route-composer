@@ -61,7 +61,7 @@ public struct DispatchQueueWrappedAction<A: Action>: Action {
         self.timeInterval = timeInterval
     }
 
-    public func perform(with viewController: UIViewController, on existingController: A.ViewController, animated: Bool, completion: @escaping (RoutingResult) -> Void) {
+    public func perform(with viewController: UIViewController, on existingController: A.ViewController, animated: Bool, completion: @escaping @MainActor (RoutingResult) -> Void) {
         guard animated else {
             action.perform(with: viewController, on: existingController, animated: false, completion: completion)
             return

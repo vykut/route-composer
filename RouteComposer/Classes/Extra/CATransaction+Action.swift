@@ -59,7 +59,7 @@ public struct CATransactionWrappedAction<A: Action>: Action {
         self.action = action
     }
 
-    public func perform(with viewController: UIViewController, on existingController: A.ViewController, animated: Bool, completion: @escaping (RoutingResult) -> Void) {
+    public func perform(with viewController: UIViewController, on existingController: A.ViewController, animated: Bool, completion: @escaping @MainActor (RoutingResult) -> Void) {
         guard animated else {
             action.perform(with: viewController, on: existingController, animated: false, completion: completion)
             return
@@ -100,7 +100,7 @@ public struct CATransactionWrappedContainerAction<A: ContainerAction>: Container
         try action.perform(embedding: viewController, in: &childViewControllers)
     }
 
-    public func perform(with viewController: UIViewController, on existingController: A.ViewController, animated: Bool, completion: @escaping (RoutingResult) -> Void) {
+    public func perform(with viewController: UIViewController, on existingController: A.ViewController, animated: Bool, completion: @escaping @MainActor (RoutingResult) -> Void) {
         guard animated else {
             action.perform(with: viewController, on: existingController, animated: false, completion: completion)
             return

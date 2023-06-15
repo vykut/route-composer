@@ -35,7 +35,7 @@ public struct UIHostingControllerFactory<ContentView: View, Context>: Factory {
 
     /// Constructor
     /// - Parameter buildBlock: Block that builds the `View` with the using the `Context` instance provided.
-    public init(_ buildBlock: @escaping (Context) -> ContentView) {
+    public init(_ buildBlock: @escaping @MainActor (Context) -> ContentView) {
         self.buildBlock = buildBlock
     }
 

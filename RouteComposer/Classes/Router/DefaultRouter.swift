@@ -75,7 +75,7 @@ public struct DefaultRouter: InterceptableRouter {
     public func navigate<Context>(to step: DestinationStep<some UIViewController, Context>,
                                   with context: Context,
                                   animated: Bool = true,
-                                  completion: ((_: RoutingResult) -> Void)? = nil) throws {
+                                  completion: @escaping @MainActor (RoutingResult) -> Void = { _ in }) throws {
         do {
             // Wrapping real context into a box.
             let context: AnyContext = AnyContextBox(context)
@@ -103,7 +103,7 @@ public struct DefaultRouter: InterceptableRouter {
                                 } else {
                                     logger?.log(.info("Successfully finished the navigation process."))
                                 }
-                                completion?(result)
+                                completion(result)
                             })
         } catch {
             logger?.log(.error("\(error)"))
@@ -188,7 +188,7 @@ public struct DefaultRouter: InterceptableRouter {
                                  building buildingInputStack: [(factory: AnyFactory, context: AnyContext)],
                                  performing taskStack: GlobalTaskRunner,
                                  animated: Bool,
-                                 completion: @escaping (RoutingResult) -> Void) {
+                                 completion: @escaping @MainActor (RoutingResult) -> Void) {
         // Executes interceptors associated to each view in the chain. All the interceptors must succeed to
         // continue navigation process. This operation is async.
         let initialControllerDescription = String(describing: viewController)
@@ -239,7 +239,7 @@ public struct DefaultRouter: InterceptableRouter {
     private func buildViewControllerStack(starting rootViewController: UIViewController,
                                           using factories: [(factory: AnyFactory, context: AnyContext)],
                                           animated: Bool,
-                                          completion: @escaping (RoutingResult) -> Void) {
+                                          completion: @escaping @MainActor (RoutingResult) -> Void) {
         var factories = factories
         let postponedIntegrationHandler = DefaultPostponedIntegrationHandler(logger: logger,
                                                                              containerAdapterLocator: containerAdapterLocator)

@@ -29,7 +29,7 @@ public struct PresentingFinder<C>: Finder {
         case topmost
 
         /// Start from the custom `UIViewController`
-        case custom(@autoclosure () throws -> UIViewController?)
+        case custom(@autoclosure @MainActor () throws -> UIViewController?)
 
     }
 

@@ -25,7 +25,7 @@ public protocol StackPresentationHandler {
     ///   - completion: Completion block
     func dismissPresented(from viewController: UIViewController,
                           animated: Bool,
-                          completion: @escaping ((_: RoutingResult) -> Void))
+                          completion: @escaping @MainActor (RoutingResult) -> Void)
 
     /// Makes the provided `UIViewController` visible in all the enclosing containers.
     /// - Parameters:
@@ -34,6 +34,6 @@ public protocol StackPresentationHandler {
     ///   - completion: Completion block
     func makeVisibleInParentContainers(_ viewController: UIViewController,
                                        animated: Bool,
-                                       completion: @escaping (RoutingResult) -> Void)
+                                       completion: @escaping @MainActor (RoutingResult) -> Void)
 
 }

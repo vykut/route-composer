@@ -38,7 +38,7 @@ public struct NavigationControllerAdapter<VC: UINavigationController>: ConcreteC
         return [topViewController]
     }
 
-    public func makeVisible(_ viewController: UIViewController, animated: Bool, completion: @escaping (_: RoutingResult) -> Void) {
+    public func makeVisible(_ viewController: UIViewController, animated: Bool, completion: @escaping @MainActor (RoutingResult) -> Void) {
         guard let navigationController else {
             completion(.failure(RoutingError.compositionFailed(.init("\(String(describing: VC.self)) has been deallocated"))))
             return
@@ -67,7 +67,7 @@ public struct NavigationControllerAdapter<VC: UINavigationController>: ConcreteC
         }
     }
 
-    public func setContainedViewControllers(_ containedViewControllers: [UIViewController], animated: Bool, completion: @escaping (_: RoutingResult) -> Void) {
+    public func setContainedViewControllers(_ containedViewControllers: [UIViewController], animated: Bool, completion: @escaping @MainActor (RoutingResult) -> Void) {
         guard let navigationController else {
             completion(.failure(RoutingError.compositionFailed(.init("\(String(describing: VC.self)) has been deallocated"))))
             return

@@ -146,7 +146,7 @@ class FactoryTest: XCTestCase {
         XCTAssertNoThrow(try postponedFactory.prepare(with: AnyContextBox(nil as Any?)))
         XCTAssertNoThrow(try postponedFactory.build(with: AnyContextBox(nil as Any?), in: &viewControllerStack))
         XCTAssertEqual(viewControllerStack.count, 1)
-        XCTAssertEqual(postponedFactory.description, "ClassFactory<UIViewController, Optional<Any>>(nibName: nil, bundle: nil, configuration: nil)")
+        XCTAssertEqual(postponedFactory.description, "ClassFactory<UIViewController, Optional<Any>>(nibName: nil, bundle: nil, configuration: (Function))")
     }
 
     func testFactoryExecuteWithAnyOrVoid() {
