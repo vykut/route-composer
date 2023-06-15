@@ -12,6 +12,7 @@
 
 import Foundation
 
+@MainActor
 protocol PreparableEntity {
 
     var isPrepared: Bool { get }

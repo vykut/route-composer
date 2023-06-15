@@ -18,6 +18,7 @@ private let lock = NSObject()
 ///
 /// **NB:** If you are going to provide your own defaults, make sure that `RouteComposerDefaults.configureWith(...)` is called
 /// before the instantiation of any other `RouteComposer`'s instances. `AppDelegate` is probably the best place for it.
+@MainActor
 public final class RouteComposerDefaults {
 
     // MARK: Properties
@@ -33,7 +34,8 @@ public final class RouteComposerDefaults {
         case let .some(configurationStorage):
             return configurationStorage
         case .none:
-            let buildInDefaults = RouteComposerDefaults()
+            let buildInDefaults = RouteComposerDefaults(windowProvider: KeyWindowProvider(),
+                                                        containerAdapterLocator: DefaultContainerAdapterLocator())
             configurationStorage = buildInDefaults
             return buildInDefaults
         }
@@ -65,8 +67,8 @@ public final class RouteComposerDefaults {
     ///   - containerAdapterLocator: Default `ContainerAdapterLocator` instance.
     ///   - stackIterator: Default `StackIterator` instance.
     public class func configureWith(logger: Logger? = DefaultLogger(.warnings),
-                                    windowProvider: WindowProvider = KeyWindowProvider(),
-                                    containerAdapterLocator: ContainerAdapterLocator = DefaultContainerAdapterLocator(),
+                                    windowProvider: WindowProvider,
+                                    containerAdapterLocator: ContainerAdapterLocator,
                                     stackIterator: StackIterator? = nil) {
         objc_sync_enter(lock)
         defer {
@@ -82,9 +84,26 @@ public final class RouteComposerDefaults {
                                                      stackIterator: stackIterator)
     }
 
+    /// Default configuration for all the instances in `RouteComposer`.
+    ///
+    /// **NB:** If you are going to provide your own defaults, make sure that `RouteComposerDefaults.configureWith(...)` is called
+    /// before the instantiation of any other `RouteComposer`'s instances. `AppDelegate` is probably the best place for it.
+    /// - Parameters:
+    ///   - logger: Default `Logger` instance.
+    ///   - stackIterator: Default `StackIterator` instance.
+    ///
+    /// required due to https://github.com/apple/swift/issues/58177
+    public class func configureWith(logger: Logger? = DefaultLogger(.warnings),
+                                    stackIterator: StackIterator? = nil) {
+        configureWith(logger: logger,
+                      windowProvider: KeyWindowProvider(),
+                      containerAdapterLocator: DefaultContainerAdapterLocator(),
+                      stackIterator: stackIterator)
+    }
+
     private init(logger: Logger? = DefaultLogger(.warnings),
-                 windowProvider: WindowProvider = KeyWindowProvider(),
-                 containerAdapterLocator: ContainerAdapterLocator = DefaultContainerAdapterLocator(),
+                 windowProvider: WindowProvider,
+                 containerAdapterLocator: ContainerAdapterLocator,
                  stackIterator: StackIterator? = nil) {
         self.logger = logger
         self.windowProvider = windowProvider

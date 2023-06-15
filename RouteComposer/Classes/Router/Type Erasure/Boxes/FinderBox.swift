@@ -13,6 +13,7 @@
 import Foundation
 import UIKit
 
+@MainActor
 struct FinderBox<F: Finder>: AnyFinder, CustomStringConvertible {
 
     let finder: F

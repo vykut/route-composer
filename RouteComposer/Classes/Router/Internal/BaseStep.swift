@@ -13,6 +13,7 @@
 import Foundation
 import UIKit
 
+@MainActor
 protocol EntitiesProvider {
 
     var finder: AnyFinder? { get }
@@ -21,6 +22,7 @@ protocol EntitiesProvider {
 
 }
 
+@MainActor
 protocol TaskProvider {
 
     var interceptor: AnyRoutingInterceptor? { get }
@@ -30,6 +32,7 @@ protocol TaskProvider {
     var postTask: AnyPostRoutingTask? { get }
 }
 
+@MainActor
 struct BaseStep: RoutingStep,
     ChainableStep,
     InterceptableStep,

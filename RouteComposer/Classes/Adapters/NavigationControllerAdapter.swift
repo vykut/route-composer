@@ -14,6 +14,7 @@ import Foundation
 import UIKit
 
 /// Default `ContainerAdapter` for `UINavigationController`
+@MainActor
 public struct NavigationControllerAdapter<VC: UINavigationController>: ConcreteContainerAdapter {
 
     // MARK: Properties

@@ -17,6 +17,7 @@ import UIKit
 ///
 /// **NB:** It may be used for the purpose of configuration testing, but then replaced with a strongly typed
 /// `ContextTask` instance.
+@MainActor
 public struct InlineContextTask<VC: UIViewController, C>: ContextTask {
 
     // MARK: Properties

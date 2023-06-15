@@ -13,4 +13,5 @@
 import Foundation
 
 /// The Protocol that explains to the library that entity should be ignored.
+@MainActor
 public protocol NilEntity {}

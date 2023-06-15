@@ -15,6 +15,7 @@ import UIKit
 
 /// The `StepAssembly` transforms a `Finder` result as a `Factory` result. It is useful
 /// when a `UIViewController` instance was built inside of the parent `ContainerFactory`.
+@MainActor
 public struct FinderFactory<F: Finder>: Factory {
 
     // MARK: Associated types

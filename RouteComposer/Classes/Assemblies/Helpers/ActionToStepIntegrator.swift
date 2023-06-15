@@ -15,6 +15,7 @@ import UIKit
 
 // This class is only needed not to expose `RoutingStep` as public.
 /// A simple class that represents an intermediate `DestinationStep` and allows to add tasks to it.
+@MainActor
 public class IntermediateDestinationStep {
 
     // Hides action integration from library user.
@@ -30,6 +31,7 @@ public class IntermediateDestinationStep {
 }
 
 /// Allows to add tasks to the step that is hidden in `IntermediateDestinationStep`.
+@MainActor
 public class ActionToStepIntegrator<VC: UIViewController, C>: IntermediateDestinationStep, InterceptableStepAssembling {
 
     // MARK: Associated types
@@ -44,7 +46,7 @@ public class ActionToStepIntegrator<VC: UIViewController, C>: IntermediateDestin
 
     // MARK: Methods
 
-    init(taskCollector: TaskCollector = TaskCollector()) {
+    init(taskCollector: TaskCollector) {
         self.taskCollector = taskCollector
     }
 

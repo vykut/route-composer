@@ -13,6 +13,7 @@
 import UIKit
 
 /// `InlineFactory`. Might be useful for the configuration testing.
+@MainActor
 public struct InlineFactory<VC: UIViewController, C>: Factory {
 
     // MARK: Associated types

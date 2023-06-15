@@ -12,6 +12,7 @@
 
 import Foundation
 
+// TODO: Remove
 protocol MainThreadChecking {}
 
 extension MainThreadChecking {

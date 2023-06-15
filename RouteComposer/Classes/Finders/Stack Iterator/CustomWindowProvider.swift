@@ -14,6 +14,7 @@ import Foundation
 import UIKit
 
 /// Returns custom `UIWindow`
+@MainActor
 public struct CustomWindowProvider: WindowProvider {
 
     // MARK: Properties

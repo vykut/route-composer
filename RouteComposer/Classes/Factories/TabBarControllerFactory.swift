@@ -14,6 +14,7 @@ import Foundation
 import UIKit
 
 ///  The `ContainerFactory` that creates a `UITabBarController` instance.
+@MainActor
 public struct TabBarControllerFactory<VC: UITabBarController, C>: ContainerFactory {
 
     // MARK: Associated types

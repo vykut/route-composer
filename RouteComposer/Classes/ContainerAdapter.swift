@@ -24,6 +24,7 @@ import UIKit
 ///  2. One or more view controllers are currently visible.
 ///  3. They can make one of these view controllers visible.
 ///  4. They can replace all of their contained view controllers.
+@MainActor
 public protocol ContainerAdapter {
 
     // MARK: Properties to implement

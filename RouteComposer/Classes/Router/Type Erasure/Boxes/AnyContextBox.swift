@@ -12,6 +12,7 @@
 
 import Foundation
 
+@MainActor
 struct AnyContextBox<C>: AnyContext {
     let context: C
 

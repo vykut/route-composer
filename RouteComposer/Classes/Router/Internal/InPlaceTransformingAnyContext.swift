@@ -12,6 +12,7 @@
 
 import Foundation
 
+@MainActor
 struct InPlaceTransformingAnyContext: AnyContext {
     let context: AnyContext
     let transformer: AnyContextTransformer

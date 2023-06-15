@@ -41,11 +41,13 @@ public extension ContainerViewController where Self: UITabBarController {
 }
 
 /// Actions for `UITabBarController`
+@MainActor
 public enum TabBarControllerActions {
 
     // MARK: Internal entities
 
     /// Integrates a `UIViewController` in to a `UITabBarController`
+    @MainActor
     public struct AddTabAction<ViewController: UITabBarController>: ContainerAction {
 
         // MARK: Properties

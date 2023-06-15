@@ -14,6 +14,7 @@ import Foundation
 import UIKit
 
 /// Default `ContainerAdapter` for `UISplitViewController`
+@MainActor
 public struct SplitControllerAdapter<VC: UISplitViewController>: ConcreteContainerAdapter {
 
     // MARK: Properties

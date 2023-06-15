@@ -14,6 +14,7 @@ import Foundation
 import UIKit
 
 /// The `Finder` that provides the `Router` a known instance of the `UIViewController`
+@MainActor
 public struct InstanceFinder<VC: UIViewController, C>: Finder {
 
     // MARK: Associated types

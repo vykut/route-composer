@@ -39,8 +39,15 @@ public struct UIHostingControllerWithContextFinder<ContentView: View & ContextCh
     /// Constructor
     ///
     /// - Parameter iterator: A `StackIterator` is to be used by `ClassWithContextFinder`
-    public init(iterator: StackIterator = RouteComposerDefaults.shared.stackIterator) {
+    public init(iterator: StackIterator) {
         self.iterator = iterator
+    }
+
+    /// Constructor
+    ///
+    /// required due to https://github.com/apple/swift/issues/58177
+    public init() {
+        self.init(iterator: RouteComposerDefaults.shared.stackIterator)
     }
 
     public func isTarget(_ viewController: ViewController, with context: Context) -> Bool {
@@ -62,11 +69,23 @@ public extension UIHostingControllerWithContextFinder {
     ///   - containerAdapterLocator: A `ContainerAdapterLocator` instance.
     init(options: SearchOptions,
          startingPoint: DefaultStackIterator.StartingPoint = .topmost,
-         windowProvider: WindowProvider = RouteComposerDefaults.shared.windowProvider,
-         containerAdapterLocator: ContainerAdapterLocator = RouteComposerDefaults.shared.containerAdapterLocator) {
+         windowProvider: WindowProvider,
+         containerAdapterLocator: ContainerAdapterLocator) {
         self.init(iterator: DefaultStackIterator(options: options, startingPoint: startingPoint, windowProvider: windowProvider, containerAdapterLocator: containerAdapterLocator))
     }
 
+    /// Constructor
+    ///
+    /// Parameters
+    ///   - options: A combination of the `SearchOptions`
+    ///   - startingPoint: `DefaultStackIterator.StartingPoint` value
+    ///
+    /// required due to https://github.com/apple/swift/issues/58177
+    init(options: SearchOptions,
+         startingPoint: DefaultStackIterator.StartingPoint = .topmost) {
+        let defaults = RouteComposerDefaults.shared
+        self.init(iterator: DefaultStackIterator(options: options, startingPoint: startingPoint, windowProvider: defaults.windowProvider, containerAdapterLocator: defaults.containerAdapterLocator))
+    }
 }
 
 #endif

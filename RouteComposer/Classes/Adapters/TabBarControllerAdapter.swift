@@ -14,6 +14,7 @@ import Foundation
 import UIKit
 
 /// Default `ContainerAdapter` for `UITabBarController`
+@MainActor
 public struct TabBarControllerAdapter<VC: UITabBarController>: ConcreteContainerAdapter {
 
     // MARK: Properties

@@ -28,6 +28,7 @@ import UIKit
 ///         .from(GeneralStep.current())
 ///         .assemble()
 /// ```
+@MainActor
 public final class StepAssembly<F: Finder, FC: AbstractFactory>: GenericStepAssembly<F.ViewController, FC.Context>
     where
     F.ViewController == FC.ViewController, F.Context == FC.Context {

@@ -13,6 +13,7 @@
 import UIKit
 
 /// Default split container step
+@MainActor
 public final class SplitControllerStep<VC: UISplitViewController, Context>: SingleContainerStep<NilFinder<VC, Context>, SplitControllerFactory<VC, Context>> {
 
     // MARK: Methods

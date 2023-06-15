@@ -15,6 +15,7 @@ import UIKit
 
 extension DefaultRouter {
 
+    @MainActor
     struct InterceptorRunner {
 
         private var interceptors: [(interceptor: AnyRoutingInterceptor, context: AnyContext)]
@@ -58,6 +59,7 @@ extension DefaultRouter {
 
     }
 
+    @MainActor
     struct ContextTaskRunner {
 
         var contextTasks: [AnyContextTask]
@@ -84,6 +86,7 @@ extension DefaultRouter {
 
     }
 
+    @MainActor
     struct PostTaskRunner {
 
         var postTasks: [AnyPostRoutingTask]
@@ -109,6 +112,7 @@ extension DefaultRouter {
 
     }
 
+    @MainActor
     struct StepTaskTaskRunner {
 
         private let contextTaskRunner: ContextTaskRunner
@@ -130,8 +134,10 @@ extension DefaultRouter {
 
     }
 
+    @MainActor
     final class PostponedTaskRunner {
 
+        @MainActor
         private struct PostTaskSlip {
             // This reference is weak because even though this view controller was created by a fabric but then some other
             // view controller in the chain can have an action that will actually remove this view controller from the
@@ -144,6 +150,7 @@ extension DefaultRouter {
 
         // this class is just a placeholder. Router needs at least one post routing task per view controller to
         // store a reference there.
+        @MainActor
         private struct EmptyPostTask: AnyPostRoutingTask {
 
             func perform(on viewController: UIViewController, with context: AnyContext, routingStack: [UIViewController]) {}
@@ -183,6 +190,7 @@ extension DefaultRouter {
         }
     }
 
+    @MainActor
     final class GlobalTaskRunner {
 
         private final var interceptorRunner: InterceptorRunner
@@ -229,6 +237,7 @@ extension DefaultRouter {
     /// This decorator adds functionality of storing `UIViewController`s created by the `Factory` and frees
     /// custom factories implementations from dealing with it. Mostly it is important for ContainerFactories
     /// which create merged view controllers without `Router`'s help.
+    @MainActor
     struct FactoryDecorator: AnyFactory, CustomStringConvertible {
 
         private var factory: AnyFactory
@@ -263,6 +272,7 @@ extension DefaultRouter {
 
     }
 
+    @MainActor
     final class DefaultPostponedIntegrationHandler: PostponedActionIntegrationHandler, MainThreadChecking {
 
         private(set) final var containerViewController: ContainerViewController?

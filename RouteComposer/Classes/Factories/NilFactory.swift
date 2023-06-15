@@ -18,6 +18,7 @@ import UIKit
 ///
 /// For example, the `UIViewController` of the step was already loaded and integrated into a stack by a
 /// storyboard in a previous step.
+@MainActor
 public struct NilFactory<VC: UIViewController, C>: Factory, NilEntity {
 
     // MARK: Associated types

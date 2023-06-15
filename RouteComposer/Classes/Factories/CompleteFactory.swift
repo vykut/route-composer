@@ -15,6 +15,7 @@ import UIKit
 
 /// The `CompleteFactory` instance is used by the `CompleteFactoryAssembly` as a `ContainerFactory` to
 /// pre-populate the children view controllers instead of the `Router`.
+@MainActor
 public struct CompleteFactory<FC: ContainerFactory>: ContainerFactory, CustomStringConvertible {
 
     // MARK: Associated types

@@ -18,6 +18,7 @@ import UIKit
 /// Its only purpose is to provide type safety checks for `StepAssembly`.
 ///
 /// For example, `UIViewController` of this step was already loaded and integrated into a stack by a storyboard.
+@MainActor
 public struct NilFinder<VC: UIViewController, C>: Finder, NilEntity {
 
     // MARK: Associated types

@@ -13,6 +13,7 @@
 import UIKit
 
 /// The `Factory` that creates a `UIViewController` instance using its type.
+@MainActor
 public struct ClassFactory<VC: UIViewController, C>: Factory {
 
     // MARK: Associated types

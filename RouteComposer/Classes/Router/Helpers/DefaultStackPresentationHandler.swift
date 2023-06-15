@@ -13,6 +13,7 @@
 import UIKit
 
 /// Default implementation of `StackPresentationHandler`
+@MainActor
 public struct DefaultStackPresentationHandler: StackPresentationHandler, MainThreadChecking {
 
     // MARK: Properties
@@ -30,10 +31,21 @@ public struct DefaultStackPresentationHandler: StackPresentationHandler, MainThr
     /// Parameters
     ///   - logger: A `Logger` instance to be used by the `DefaultRouter`.
     ///   - containerAdapterLocator: A `ContainerAdapterLocator` instance to be used by the `DefaultRouter`.
-    public init(logger: Logger? = RouteComposerDefaults.shared.logger,
-                containerAdapterLocator: ContainerAdapterLocator = RouteComposerDefaults.shared.containerAdapterLocator) {
+    public init(logger: Logger?,
+                containerAdapterLocator: ContainerAdapterLocator) {
         self.logger = logger
         self.containerAdapterLocator = containerAdapterLocator
+    }
+
+    // MARK: Methods
+
+    /// Constructor
+    ///
+    /// required due to https://github.com/apple/swift/issues/58177
+    public init() {
+        let defaults = RouteComposerDefaults.shared
+        self.init(logger: defaults.logger,
+                  containerAdapterLocator: defaults.containerAdapterLocator)
     }
 
     public func dismissPresented(from viewController: UIViewController, animated: Bool, completion: @escaping (_: RoutingResult) -> Void) {

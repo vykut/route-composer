@@ -39,10 +39,12 @@ import UIKit
 ///                    .from(GeneralStep.current())
 ///                    .assemble())
 /// ```
+@MainActor
 public final class SwitchAssembly<ViewController: UIViewController, Context> {
 
     // MARK: Internal entities
 
+    @MainActor
     private struct BlockResolver: StepCaseResolver {
 
         let resolverBlock: (_: Context) -> DestinationStep<ViewController, Context>?
@@ -59,6 +61,7 @@ public final class SwitchAssembly<ViewController: UIViewController, Context> {
         }
     }
 
+    @MainActor
     private struct FinderResolver<ViewController: UIViewController, Context>: StepCaseResolver {
 
         private let finder: AnyFinder?

@@ -13,6 +13,7 @@
 import UIKit
 
 /// Default navigation container step
+@MainActor
 public final class NavigationControllerStep<VC: UINavigationController, Context>: SingleContainerStep<NilFinder<VC, Context>, NavigationControllerFactory<VC, Context>> {
 
     // MARK: Methods

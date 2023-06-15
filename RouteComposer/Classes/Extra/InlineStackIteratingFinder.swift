@@ -13,6 +13,7 @@
 import UIKit
 
 /// `InlineStackIteratingFinder`. Might be useful for the configuration testing.
+@MainActor
 public struct InlineStackIteratingFinder<VC: UIViewController, C>: StackIteratingFinder {
 
     // MARK: Associated types
@@ -35,10 +36,20 @@ public struct InlineStackIteratingFinder<VC: UIViewController, C>: StackIteratin
     /// - Parameters:
     ///   - iterator: A `StackIterator` is to be used by `InlineStackIteratingFinder`
     ///   - inlineBock: A block to be called when `StackIteratingFinder.isTarget(...)` is requested.
-    public init(iterator: StackIterator = RouteComposerDefaults.shared.stackIterator,
+    public init(iterator: StackIterator,
                 _ inlineBock: @escaping (VC, C) -> Bool) {
         self.iterator = iterator
         self.inlineBock = inlineBock
+    }
+
+    /// Constructor
+    /// - Parameters:
+    ///   - inlineBock: A block to be called when `StackIteratingFinder.isTarget(...)` is requested.
+    ///
+    ///   required due to https://github.com/apple/swift/issues/58177
+    public init(_ inlineBock: @escaping (VC, C) -> Bool) {
+        self.init(iterator: RouteComposerDefaults.shared.stackIterator,
+                  inlineBock)
     }
 
     public func isTarget(_ viewController: VC, with context: C) -> Bool {
@@ -60,10 +71,33 @@ public extension InlineStackIteratingFinder {
     ///   - inlineBock: A block to be called when `StackIteratingFinder.isTarget(...)` is requested.
     init(options: SearchOptions,
          startingPoint: DefaultStackIterator.StartingPoint = .topmost,
-         windowProvider: WindowProvider = RouteComposerDefaults.shared.windowProvider,
-         containerAdapterLocator: ContainerAdapterLocator = RouteComposerDefaults.shared.containerAdapterLocator,
+         windowProvider: WindowProvider,
+         containerAdapterLocator: ContainerAdapterLocator,
          predicate inlineBock: @escaping (VC, C) -> Bool) {
-        self.init(iterator: DefaultStackIterator(options: options, startingPoint: startingPoint, windowProvider: windowProvider, containerAdapterLocator: containerAdapterLocator), inlineBock)
+        self.init(iterator: DefaultStackIterator(options: options,
+                                                 startingPoint: startingPoint,
+                                                 windowProvider: windowProvider,
+                                                 containerAdapterLocator: containerAdapterLocator),
+                  inlineBock)
+    }
+
+    /// Constructor
+    ///
+    /// - Parameters:
+    ///   - options: A combination of the `SearchOptions`
+    ///   - startingPoint: `DefaultStackIterator.StartingPoint` value
+    ///   - inlineBock: A block to be called when `StackIteratingFinder.isTarget(...)` is requested.
+    ///
+    ///   required due to https://github.com/apple/swift/issues/58177
+    init(options: SearchOptions,
+         startingPoint: DefaultStackIterator.StartingPoint = .topmost,
+         predicate inlineBock: @escaping (VC, C) -> Bool) {
+        let defaults = RouteComposerDefaults.shared
+        self.init(iterator: DefaultStackIterator(options: options,
+                                                 startingPoint: startingPoint,
+                                                 windowProvider: defaults.windowProvider,
+                                                 containerAdapterLocator: defaults.containerAdapterLocator),
+                  inlineBock)
     }
 
 }

@@ -13,6 +13,7 @@
 import Foundation
 import UIKit
 
+@MainActor
 enum PerformableStepResult {
 
     case updateContext(AnyContext)

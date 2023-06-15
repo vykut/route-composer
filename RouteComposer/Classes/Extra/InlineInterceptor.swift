@@ -17,6 +17,7 @@ import UIKit
 ///
 /// **NB:** It may be used for the purpose of configuration testing, but then replaced with a strongly typed
 /// `RoutingInterceptor` instance.
+@MainActor
 public struct InlineInterceptor<C>: RoutingInterceptor {
 
     // MARK: Properties

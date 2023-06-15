@@ -27,6 +27,7 @@ import UIKit
 ///
 ///  }
 /// ```
+@MainActor
 public protocol CustomContainerViewController: ContainerViewController {
 
     // MARK: Properties to implement

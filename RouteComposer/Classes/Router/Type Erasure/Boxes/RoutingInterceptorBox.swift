@@ -12,6 +12,7 @@
 
 import Foundation
 
+@MainActor
 struct RoutingInterceptorBox<RI: RoutingInterceptor>: AnyRoutingInterceptor, PreparableEntity, CustomStringConvertible, MainThreadChecking {
 
     var routingInterceptor: RI

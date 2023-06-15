@@ -14,6 +14,7 @@ import Foundation
 import UIKit
 
 ///  The `ContainerFactory` that creates a `UISplitController` instance.
+@MainActor
 public struct SplitControllerFactory<VC: UISplitViewController, C>: ContainerFactory {
 
     // MARK: Associated types

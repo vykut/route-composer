@@ -21,6 +21,7 @@ import UIKit
 /// `productID` to display its content, and the `productID` is a `UUID`, then the type of `Context` is the `UUID`. The internal logic
 /// belongs to the view controller. `Context` answers the questions *What to I need to present a ProductViewController* and *Am I
 /// already presenting a ProductViewController for this product*.
+@MainActor 
 public protocol Factory: AbstractFactory {
 
     // MARK: Associated types

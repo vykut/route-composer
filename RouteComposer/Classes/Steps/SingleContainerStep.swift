@@ -14,12 +14,14 @@ import Foundation
 import UIKit
 
 /// A simple class that produces an intermediate `ActionToStepIntegrator` describing a container view controller.
+@MainActor
 public class SingleContainerStep<F: Finder, FC: ContainerFactory>: ActionToStepIntegrator<F.ViewController, F.Context>
-    where
-    F.ViewController == FC.ViewController, F.Context == FC.Context {
+where
+F.ViewController == FC.ViewController, F.Context == FC.Context {
 
     // MARK: Internal entities
 
+    @MainActor
     final class UnsafeWrapper<VC: UIViewController, C, F: Finder, FC: ContainerFactory>: ActionToStepIntegrator<VC, C>
         where
         F.ViewController == FC.ViewController, F.Context == FC.Context {
@@ -57,6 +59,7 @@ public class SingleContainerStep<F: Finder, FC: ContainerFactory>: ActionToStepI
     public init(finder: F, factory: FC) {
         self.finder = finder
         self.factory = factory
+        super.init(taskCollector: TaskCollector())
     }
 
     final override func routingStep(with action: some Action) -> RoutingStep {

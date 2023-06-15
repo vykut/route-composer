@@ -14,16 +14,18 @@ import Foundation
 import UIKit
 
 /// A wrapper for the general steps that can be applied to any `UIViewController`
+@MainActor
 public enum GeneralStep {
 
     // MARK: Internal entities
 
+    @MainActor
     struct RootViewControllerStep: RoutingStep, PerformableStep {
 
         let windowProvider: WindowProvider
 
         /// Constructor
-        init(windowProvider: WindowProvider = RouteComposerDefaults.shared.windowProvider) {
+        init(windowProvider: WindowProvider) {
             self.windowProvider = windowProvider
         }
 
@@ -36,12 +38,13 @@ public enum GeneralStep {
 
     }
 
+    @MainActor
     struct CurrentViewControllerStep: RoutingStep, PerformableStep {
 
         let windowProvider: WindowProvider
 
         /// Constructor
-        init(windowProvider: WindowProvider = RouteComposerDefaults.shared.windowProvider) {
+        init(windowProvider: WindowProvider) {
             self.windowProvider = windowProvider
         }
 
@@ -54,6 +57,7 @@ public enum GeneralStep {
 
     }
 
+    @MainActor
     struct FinderStep: RoutingStep, PerformableStep {
 
         let finder: AnyFinder?
@@ -73,13 +77,23 @@ public enum GeneralStep {
     // MARK: Steps
 
     /// Returns the root view controller of the key window.
-    public static func root<C>(windowProvider: WindowProvider = RouteComposerDefaults.shared.windowProvider) -> DestinationStep<UIViewController, C> {
+    public static func root<C>(windowProvider: WindowProvider) -> DestinationStep<UIViewController, C> {
         DestinationStep(RootViewControllerStep(windowProvider: windowProvider))
     }
 
+    /// Returns the root view controller of the key window.
+    public static func root<C>() -> DestinationStep<UIViewController, C> {
+        root(windowProvider: RouteComposerDefaults.shared.windowProvider)
+    }
+
     /// Returns the topmost presented view controller.
-    public static func current<C>(windowProvider: WindowProvider = RouteComposerDefaults.shared.windowProvider) -> DestinationStep<UIViewController, C> {
+    public static func current<C>(windowProvider: WindowProvider) -> DestinationStep<UIViewController, C> {
         DestinationStep(CurrentViewControllerStep(windowProvider: windowProvider))
+    }
+
+    /// Returns the topmost presented view controller.
+    public static func current<C>() -> DestinationStep<UIViewController, C> {
+        current(windowProvider: RouteComposerDefaults.shared.windowProvider)
     }
 
     /// Returns the resulting view controller of the finder provided.

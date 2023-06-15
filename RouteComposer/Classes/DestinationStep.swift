@@ -14,6 +14,7 @@ import Foundation
 import UIKit
 
 /// Represents a single step for the `Router` to make.
+@MainActor
 public struct DestinationStep<VC: UIViewController, C>: RoutingStep, ChainableStep {
 
     // MARK: Associated types

@@ -12,6 +12,7 @@
 
 import Foundation
 
+@MainActor
 struct ConvertingStep<CT: ContextTransformer>: RoutingStep,
     ChainableStep,
     PerformableStep {

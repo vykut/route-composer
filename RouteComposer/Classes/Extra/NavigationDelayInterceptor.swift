@@ -22,6 +22,7 @@ import UIKit
 /// *NB: `UIKit` does not allow simultaneous changes in `UIViewController` stack. The `.wait` strategy does not
 /// guarantee 100% protection from all possible situations. The code must be written in a way that avoids such
 /// situations. The `.wait` strategy can be used only as a temporary solution.*
+@MainActor
 public struct NavigationDelayingInterceptor<Context>: RoutingInterceptor {
 
     // MARK: Internal entities
@@ -59,12 +60,25 @@ public struct NavigationDelayingInterceptor<Context>: RoutingInterceptor {
     ///   - windowProvider: `WindowProvider` instance.
     ///   - strategy: Type of `Strategy` to be used.
     ///   - logger: `Logger` instance.
-    public init(windowProvider: WindowProvider = RouteComposerDefaults.shared.windowProvider,
+    public init(windowProvider: WindowProvider,
                 strategy: Strategy = .abort,
-                logger: Logger? = RouteComposerDefaults.shared.logger) {
+                logger: Logger?) {
         self.windowProvider = windowProvider
         self.logger = logger
         self.strategy = strategy
+    }
+
+    /// Constructor
+    ///
+    /// - Parameters:
+    ///   - strategy: Type of `Strategy` to be used.
+    ///
+    /// required due to https://github.com/apple/swift/issues/58177
+    public init(strategy: Strategy = .abort) {
+        let defaults = RouteComposerDefaults.shared
+        self.init(windowProvider: defaults.windowProvider,
+                  strategy: strategy,
+                  logger: defaults.logger)
     }
 
     public func perform(with context: Context, completion: @escaping (RoutingResult) -> Void) {

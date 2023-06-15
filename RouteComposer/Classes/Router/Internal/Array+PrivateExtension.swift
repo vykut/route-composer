@@ -15,6 +15,7 @@ import UIKit
 
 extension Array where Element: UIViewController {
 
+    @MainActor
     var nonDismissibleViewController: UIViewController? {
         compactMap {
             $0 as? RoutingInterceptable & UIViewController

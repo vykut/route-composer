@@ -15,6 +15,7 @@ import Foundation
 import UIKit
 import XCTest
 
+@MainActor
 class MultiplexerTest: XCTestCase {
 
     func testRoutingInterceptorPrepare() {
@@ -137,6 +138,7 @@ class MultiplexerTest: XCTestCase {
         XCTAssertThrowsError(try multiplexer.perform(on: UIViewController(), with: AnyContextBox(nil as Any?)))
     }
 
+    @MainActor
     func testContextTaskDescription() {
         let contextTask = [
             ContextTaskBox(ContextSettingTask<ExtrasTest.ContentAcceptingViewController>())

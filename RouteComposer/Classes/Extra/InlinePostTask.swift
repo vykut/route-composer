@@ -17,6 +17,7 @@ import UIKit
 ///
 /// **NB:** It may be used for the purpose of configuration testing, but then replaced with a strongly typed
 /// `PostRoutingTask` instance.
+@MainActor
 public struct InlinePostTask<VC: UIViewController, C>: PostRoutingTask {
 
     // MARK: Properties

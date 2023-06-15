@@ -13,6 +13,7 @@
 import Foundation
 import UIKit
 
+@MainActor
 struct PostRoutingTaskBox<PT: PostRoutingTask>: AnyPostRoutingTask, MainThreadChecking, CustomStringConvertible {
 
     let postRoutingTask: PT

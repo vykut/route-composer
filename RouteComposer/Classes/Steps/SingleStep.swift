@@ -14,6 +14,7 @@ import Foundation
 import UIKit
 
 /// A simple class that produces an intermediate `ActionToStepIntegrator` describing any view controller.
+@MainActor
 public final class SingleStep<F: Finder, FC: Factory>: ActionToStepIntegrator<F.ViewController, F.Context>
     where
     F.ViewController == FC.ViewController, F.Context == FC.Context {
@@ -57,6 +58,7 @@ public final class SingleStep<F: Finder, FC: Factory>: ActionToStepIntegrator<F.
     public init(finder: F, factory: FC) {
         self.finder = finder
         self.factory = factory
+        super.init(taskCollector: TaskCollector())
     }
 
     final override func routingStep(with action: some Action) -> RoutingStep {

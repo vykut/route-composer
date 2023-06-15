@@ -224,6 +224,7 @@ class ExtensionsTest: XCTestCase {
         XCTAssertNotNil(try? UIViewController.findViewController(in: invisibleController, options: searchOption, using: { $0 is InvisibleViewController }))
     }
 
+    @MainActor
     func testArrayNonDismissibleViewController() {
         let array1 = [UIViewController(), RouterTests.TestRoutingControllingViewController()]
         let array2 = [UIViewController(), UINavigationController(rootViewController: RouterTests.TestRoutingControllingViewController())]
@@ -272,6 +273,7 @@ class ExtensionsTest: XCTestCase {
         XCTAssertEqual(viewController1.allParents.count, 0)
     }
 
+    @MainActor
     func testRoutingInterceptorExecute() {
 
         class TestInterceptor<C>: RoutingInterceptor {
@@ -363,6 +365,7 @@ class ExtensionsTest: XCTestCase {
         XCTAssertEqual(interceptor3.performCallsCount, 0)
     }
 
+    @MainActor
     func testContextTaskExecute() {
         class TestContextTask<VC: UIViewController, C>: ContextTask {
 

@@ -13,6 +13,7 @@
 import Foundation
 import UIKit
 
+@MainActor
 struct ContextTaskBox<CT: ContextTask>: AnyContextTask, PreparableEntity, MainThreadChecking, CustomStringConvertible {
 
     var contextTask: CT

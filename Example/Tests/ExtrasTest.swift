@@ -15,6 +15,7 @@ import Foundation
 import UIKit
 import XCTest
 
+@MainActor
 class ExtrasTest: XCTestCase {
 
     let router = SingleNavigationRouter(router: DefaultRouter(), lock: SingleNavigationLock())
@@ -195,6 +196,7 @@ class ExtrasTest: XCTestCase {
         XCTAssertEqual(wasInCompletion, true)
     }
 
+    @MainActor
     func testNavigationDelayingInterceptorPerform() {
         class DismissingViewController: UIViewController {
             override var isBeingDismissed: Bool {
@@ -204,7 +206,9 @@ class ExtrasTest: XCTestCase {
 
         let window = UIWindow()
         window.rootViewController = DismissingViewController()
-        let interceptor = NavigationDelayingInterceptor<Any?>(windowProvider: CustomWindowProvider(window: window), strategy: .abort)
+        let interceptor = NavigationDelayingInterceptor<Any?>(windowProvider: CustomWindowProvider(window: window),
+                                                              strategy: .abort,
+                                                              logger: RouteComposerDefaults.shared.logger)
 
         var wasInCompletion = false
         interceptor.perform(with: nil, completion: { result in
@@ -214,8 +218,11 @@ class ExtrasTest: XCTestCase {
         XCTAssertTrue(wasInCompletion)
     }
 
+    @MainActor
     func testNavigationDetailsFinder() {
-        let emptyFinder = DetailsNavigationFinder<Any?>(options: SearchOptions.current, windowProvider: TestWindowProvider(window: TestWindow()))
+        let emptyFinder = DetailsNavigationFinder<Any?>(options: SearchOptions.current,
+                                                        windowProvider: TestWindowProvider(window: TestWindow()),
+                                                        containerAdapterLocator: RouteComposerDefaults.shared.containerAdapterLocator)
         XCTAssertNil(emptyFinder.getViewController())
 
         let splitViewController = UISplitViewController()

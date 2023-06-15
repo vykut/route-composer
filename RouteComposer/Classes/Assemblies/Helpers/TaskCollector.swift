@@ -12,6 +12,7 @@
 
 import Foundation
 
+@MainActor
 struct TaskCollector: TaskProvider {
 
     private var interceptors: [AnyRoutingInterceptor] = []

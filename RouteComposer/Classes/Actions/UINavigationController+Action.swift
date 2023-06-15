@@ -37,11 +37,13 @@ public extension ContainerViewController where Self: UINavigationController {
 }
 
 /// Actions for `UINavigationController`
+@MainActor
 public enum NavigationControllerActions {
 
     // MARK: Internal entities
 
     /// Pushes a view controller into `UINavigationController`'s child stack
+    @MainActor
     public struct PushAction<ViewController: UINavigationController>: ContainerAction {
 
         // MARK: Methods
@@ -66,6 +68,7 @@ public enum NavigationControllerActions {
     }
 
     /// Replaces all the child view controllers in the `UINavigationController`'s child stack
+    @MainActor
     public struct PushAsRootAction<ViewController: UINavigationController>: ContainerAction {
 
         // MARK: Methods
@@ -96,6 +99,7 @@ public enum NavigationControllerActions {
     }
 
     /// Pushes a view controller into the `UINavigationController`'s child stack replacing the last one
+    @MainActor
     public struct PushReplacingLastAction<ViewController: UINavigationController>: ContainerAction {
 
         // MARK: Methods

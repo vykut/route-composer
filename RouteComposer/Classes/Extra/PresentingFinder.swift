@@ -14,6 +14,7 @@ import Foundation
 import UIKit
 
 /// `PresentingFinder` returns the presenting `UIViewController` of the topmost one in current stack.
+@MainActor
 public struct PresentingFinder<C>: Finder {
 
     // MARK: Internal entities
@@ -47,10 +48,21 @@ public struct PresentingFinder<C>: Finder {
     /// - Parameters:
     ///   - windowProvider: `WindowProvider` instance.
     ///   - startingPoint: `DefaultStackIterator.StartingPoint` value
-    public init(windowProvider: WindowProvider = RouteComposerDefaults.shared.windowProvider,
+    public init(windowProvider: WindowProvider,
                 startingPoint: StartingPoint = .topmost) {
         self.windowProvider = windowProvider
         self.startingPoint = startingPoint
+    }
+
+    /// Constructor
+    ///
+    /// - Parameters:
+    ///   - startingPoint: `DefaultStackIterator.StartingPoint` value
+    ///
+    /// required due to https://github.com/apple/swift/issues/58177
+    public init(startingPoint: StartingPoint = .topmost) {
+        self.init(windowProvider: RouteComposerDefaults.shared.windowProvider,
+                  startingPoint: startingPoint)
     }
 
     public func findViewController(with context: C) throws -> UIViewController? {

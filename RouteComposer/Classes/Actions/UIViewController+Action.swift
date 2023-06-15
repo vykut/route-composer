@@ -14,6 +14,7 @@ import Foundation
 import UIKit
 
 /// A wrapper for general actions that can be applied to any `UIViewController`
+@MainActor
 public enum GeneralAction {
 
     // MARK: Actions
@@ -24,10 +25,22 @@ public enum GeneralAction {
     ///   - windowProvider: `WindowProvider` instance
     ///   - animationOptions: Set of `UIView.AnimationOptions`. Transition will happen without animation if not provided.
     ///   - duration: Transition duration.
-    public static func replaceRoot(windowProvider: WindowProvider = RouteComposerDefaults.shared.windowProvider,
+    public static func replaceRoot(windowProvider: WindowProvider,
                                    animationOptions: UIView.AnimationOptions? = nil,
                                    duration: TimeInterval = 0.3) -> ViewControllerActions.ReplaceRootAction {
         ViewControllerActions.ReplaceRootAction(windowProvider: windowProvider, animationOptions: animationOptions, duration: duration)
+    }
+
+    /// Replaces the root view controller in the key `UIWindow`
+    ///
+    /// - Parameters:
+    ///   - animationOptions: Set of `UIView.AnimationOptions`. Transition will happen without animation if not provided.
+    ///   - duration: Transition duration.
+    ///
+    /// required due to https://github.com/apple/swift/issues/58177
+    public static func replaceRoot(animationOptions: UIView.AnimationOptions? = nil,
+                                   duration: TimeInterval = 0.3) -> ViewControllerActions.ReplaceRootAction {
+        replaceRoot(windowProvider: RouteComposerDefaults.shared.windowProvider, animationOptions: animationOptions, duration: duration)
     }
 
     /// Presents a view controller modally
@@ -64,11 +77,13 @@ public enum GeneralAction {
 }
 
 /// A wrapper for general actions that can be applied to any `UIViewController`
+@MainActor
 public enum ViewControllerActions {
 
     // MARK: Internal entities
 
     /// Presents a view controller modally
+    @MainActor
     public struct PresentModallyAction: Action {
 
         /// A starting point in the modal presentation
@@ -190,6 +205,7 @@ public enum ViewControllerActions {
     }
 
     /// Replaces the root view controller in the key `UIWindow`
+    @MainActor
     public struct ReplaceRootAction: Action {
 
         // MARK: Properties
@@ -211,7 +227,7 @@ public enum ViewControllerActions {
         ///   - windowProvider: `WindowProvider` instance
         ///   - animationOptions: Set of `UIView.AnimationOptions`. Transition will happen without animation if not provided.
         ///   - duration: Transition duration.
-        init(windowProvider: WindowProvider = RouteComposerDefaults.shared.windowProvider, animationOptions: UIView.AnimationOptions? = nil, duration: TimeInterval = 0.3) {
+        init(windowProvider: WindowProvider, animationOptions: UIView.AnimationOptions? = nil, duration: TimeInterval = 0.3) {
             self.windowProvider = windowProvider
             self.animationOptions = animationOptions
             self.duration = duration
@@ -252,6 +268,7 @@ public enum ViewControllerActions {
     }
 
     /// Helper `Action` that does nothing
+    @MainActor
     public struct NilAction: Action {
 
         // MARK: Methods

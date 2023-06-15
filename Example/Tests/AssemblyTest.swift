@@ -15,6 +15,7 @@ import Foundation
 import UIKit
 import XCTest
 
+@MainActor
 class AssemblyTest: XCTestCase {
 
     struct NilContainerFactory<VC: ContainerViewController, C>: ContainerFactory, NilEntity {
@@ -269,7 +270,7 @@ class AssemblyTest: XCTestCase {
     }
 
     func testActionToStepIntegratorWithTasks() {
-        let assembly = ActionToStepIntegrator<RouterTests.TestViewController, Any?>()
+        let assembly = ActionToStepIntegrator<RouterTests.TestViewController, Any?>(taskCollector: TaskCollector())
             .adding(InlineInterceptor { (_: Any?) in
             })
             .adding(InlineContextTask { (_: RouterTests.TestViewController, _: Any?) in
@@ -282,7 +283,7 @@ class AssemblyTest: XCTestCase {
     }
 
     func testActionToStepIntegrator() {
-        let integrator = ActionToStepIntegrator<UIViewController, Any>()
+        let integrator = ActionToStepIntegrator<UIViewController, Any>(taskCollector: TaskCollector())
         XCTAssertNil(integrator.routingStep(with: ViewControllerActions.NilAction()))
         XCTAssertNil(integrator.embeddableRoutingStep(with: UINavigationController.push()))
     }

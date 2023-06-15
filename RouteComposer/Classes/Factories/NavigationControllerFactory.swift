@@ -13,6 +13,7 @@
 import UIKit
 
 /// The `ContainerFactory` that creates a `UINavigationController` instance.
+@MainActor
 public struct NavigationControllerFactory<VC: UINavigationController, C>: ContainerFactory {
 
     // MARK: Associated types

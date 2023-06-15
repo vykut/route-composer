@@ -17,6 +17,7 @@ import UIKit
 public extension Array where Element: UIViewController {
 
     /// Returns `true` if all `UIViewController` instances can be dismissed.
+    @MainActor
     var canBeDismissed: Bool {
         nonDismissibleViewController == nil
     }

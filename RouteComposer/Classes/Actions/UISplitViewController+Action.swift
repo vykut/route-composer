@@ -38,11 +38,13 @@ public extension ContainerViewController where Self: UISplitViewController {
 }
 
 /// Actions for `UISplitViewController`
+@MainActor
 public enum SplitViewControllerActions {
 
     // MARK: Internal entities
 
     /// Presents a master view controller in the `UISplitViewController`
+    @MainActor
     public struct SetAsMasterAction<ViewController: UISplitViewController>: ContainerAction {
 
         // MARK: Methods
@@ -73,6 +75,7 @@ public enum SplitViewControllerActions {
     }
 
     /// Presents a detail view controller in the `UISplitViewController`, *replacing* the previous detail.
+    @MainActor
     public struct PushToDetailsAction<ViewController: UISplitViewController>: ContainerAction {
 
         // MARK: Methods

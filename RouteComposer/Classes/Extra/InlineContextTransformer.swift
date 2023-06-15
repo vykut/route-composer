@@ -16,6 +16,7 @@ import Foundation
 ///
 /// **NB:** It may be used for the purpose of configuration testing, but then replaced with a strongly typed
 /// `ContextTransformer` instance.
+@MainActor
 public final class InlineContextTransformer<SourceContext, TargetContext>: ContextTransformer {
 
     // MARK: Properties

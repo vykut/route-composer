@@ -16,6 +16,7 @@ import UIKit
 var associatedObjectHandle: UInt8 = 0
 
 /// `UIViewController` should conform to `Dismissible` protocol to be used with `DismissalMethodProvidingContextTask`.
+@MainActor
 public protocol Dismissible where Self: UIViewController {
 
     // MARK: Associated types
@@ -84,6 +85,7 @@ public extension Dismissible where DismissalTargetContext == Void {
 
 /// `DismissibleWithRuntimeStorage` simplifies `Dismissible` protocol conformance implementing required
 /// `dismissalBlock` using Objective C runtime.
+@MainActor
 public protocol DismissibleWithRuntimeStorage: Dismissible {}
 
 public extension DismissibleWithRuntimeStorage {

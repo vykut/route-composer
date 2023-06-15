@@ -13,6 +13,7 @@
 import Foundation
 import UIKit
 
+@MainActor
 struct ActionBox<A: Action>: AnyAction, AnyActionBox, CustomStringConvertible, MainThreadChecking {
 
     let action: A

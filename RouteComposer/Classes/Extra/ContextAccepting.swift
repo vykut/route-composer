@@ -14,6 +14,7 @@ import Foundation
 import UIKit
 
 /// The protocol for a `UIViewController` to make it compatible with `ContextSettingTask`.
+@MainActor
 public protocol ContextAccepting where Self: UIViewController {
 
     // MARK: Associated types

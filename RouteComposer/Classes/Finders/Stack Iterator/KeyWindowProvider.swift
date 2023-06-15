@@ -14,6 +14,7 @@ import Foundation
 import UIKit
 
 /// Returns key `UIWindow`
+@MainActor
 public struct KeyWindowProvider: WindowProvider {
 
     // MARK: Properties

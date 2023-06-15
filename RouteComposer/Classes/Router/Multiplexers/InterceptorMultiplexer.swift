@@ -12,6 +12,7 @@
 
 import Foundation
 
+@MainActor
 struct InterceptorMultiplexer: AnyRoutingInterceptor, MainThreadChecking, CustomStringConvertible {
 
     private var interceptors: [AnyRoutingInterceptor]

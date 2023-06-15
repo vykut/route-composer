@@ -15,6 +15,7 @@ import UIKit
 
 /// An instance that conforms to the `Finder` protocol will be used by the `Router` to find out if some `UIViewController`
 /// instance is integrated into the view controller stack
+@MainActor
 public protocol Finder {
 
     // MARK: Associated types

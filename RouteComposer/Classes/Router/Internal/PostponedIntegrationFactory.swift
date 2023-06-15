@@ -13,6 +13,7 @@
 import Foundation
 import UIKit
 
+@MainActor
 struct PostponedIntegrationFactory: CustomStringConvertible {
 
     var factory: AnyFactory

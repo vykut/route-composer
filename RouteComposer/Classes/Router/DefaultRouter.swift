@@ -13,6 +13,7 @@
 import UIKit
 
 /// Default `Router` implementation
+@MainActor
 public struct DefaultRouter: InterceptableRouter, MainThreadChecking {
 
     // MARK: Properties
@@ -40,12 +41,23 @@ public struct DefaultRouter: InterceptableRouter, MainThreadChecking {
     ///   - logger: A `Logger` instance to be used by the `DefaultRouter`.
     ///   - stackPresentationHandler: A `StackPresentationHandler` instance to be used by the `DefaultRouter`.
     ///   - containerAdapterLocator: A `ContainerAdapterLocator` instance to be used by the `DefaultRouter`.
-    public init(logger: Logger? = RouteComposerDefaults.shared.logger,
-                stackPresentationHandler: StackPresentationHandler = DefaultStackPresentationHandler(),
-                containerAdapterLocator: ContainerAdapterLocator = RouteComposerDefaults.shared.containerAdapterLocator) {
+    public init(logger: Logger?,
+                stackPresentationHandler: StackPresentationHandler,
+                containerAdapterLocator: ContainerAdapterLocator) {
         self.logger = logger
         self.stackPresentationHandler = stackPresentationHandler
         self.containerAdapterLocator = containerAdapterLocator
+    }
+
+    /// Constructor
+    ///
+    /// required due to https://github.com/apple/swift/issues/58177
+    public init() {
+        let defaults = RouteComposerDefaults.shared
+        self.init(logger: defaults.logger,
+                  stackPresentationHandler: DefaultStackPresentationHandler(logger: defaults.logger,
+                                                                            containerAdapterLocator: defaults.containerAdapterLocator),
+                  containerAdapterLocator: defaults.containerAdapterLocator)
     }
 
     public mutating func add<RI: RoutingInterceptor>(_ interceptor: RI) where RI.Context == Any? {

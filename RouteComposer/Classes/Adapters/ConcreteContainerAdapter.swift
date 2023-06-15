@@ -13,6 +13,7 @@
 import Foundation
 
 /// Provides universal properties and methods of the `ContainerViewController` instance.
+@MainActor
 public protocol ConcreteContainerAdapter: ContainerAdapter {
 
     // MARK: Associated types

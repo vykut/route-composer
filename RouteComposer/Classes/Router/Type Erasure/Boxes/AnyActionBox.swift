@@ -12,6 +12,7 @@
 
 import Foundation
 
+@MainActor
 protocol AnyActionBox: AnyAction {
 
     associatedtype ActionType: AbstractAction

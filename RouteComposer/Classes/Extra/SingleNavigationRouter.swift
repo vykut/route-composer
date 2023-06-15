@@ -14,6 +14,7 @@ import Foundation
 import UIKit
 
 /// Lock object to be shared between `SingleNavigationRouter` instances.
+@MainActor
 public final class SingleNavigationLock {
 
     private final var isNavigationInProgressFlag = false
@@ -40,6 +41,7 @@ public final class SingleNavigationLock {
 ///
 /// It is useful to avoid situations when the application can not control the amount of navigations
 /// (for example, a navigation triggered by the push notifications)
+@MainActor
 public struct SingleNavigationRouter<R>: Router where R: Router {
 
     // MARK: Properties

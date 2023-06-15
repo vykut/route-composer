@@ -14,6 +14,7 @@ import Foundation
 import UIKit
 
 /// Default implementation of `ContainerAdapterLocator`
+@MainActor
 public struct DefaultContainerAdapterLocator: ContainerAdapterLocator {
 
     // MARK: Methods
@@ -52,5 +53,4 @@ public struct DefaultContainerAdapterLocator: ContainerAdapterLocator {
             throw RoutingError.compositionFailed(.init(message))
         }
     }
-
 }

@@ -17,6 +17,7 @@ import UIKit
 /// The `UIViewController` should conform to `Dismissible` protocol and call `Dismissible.dismissViewController(...)` method
 /// when it needs to be dismissed to trigger the dismissal process implemented in `DismissalMethodProvidingContextTask.init(...)`
 /// constructor.
+@MainActor
 public struct DismissalMethodProvidingContextTask<VC: Dismissible, C>: ContextTask {
 
     // MARK: Properties

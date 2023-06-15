@@ -14,6 +14,7 @@ import Foundation
 import UIKit
 
 /// Default implementation of `StackIterator` protocol
+@MainActor
 public struct DefaultStackIterator: StackIterator {
 
     // MARK: Internal entities
@@ -23,6 +24,7 @@ public struct DefaultStackIterator: StackIterator {
     /// - topMost: Start from the topmost `UIViewController`
     /// - root: Start from the `UIWindow`s root `UIViewController`
     /// - custom: Start from the custom `UIViewController`
+    @MainActor
     public enum StartingPoint {
 
         /// Start from the topmost `UIViewController`

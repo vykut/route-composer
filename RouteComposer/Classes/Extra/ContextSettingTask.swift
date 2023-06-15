@@ -14,6 +14,7 @@ import Foundation
 import UIKit
 
 /// `ContextTask` that simplifies setting of the context to the `UIViewController` that implements `ContextAccepting` protocol.
+@MainActor
 public struct ContextSettingTask<VC: ContextAccepting>: ContextTask {
 
     // MARK: Methods

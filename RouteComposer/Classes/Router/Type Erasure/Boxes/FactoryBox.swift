@@ -13,6 +13,7 @@
 import Foundation
 import UIKit
 
+@MainActor
 struct FactoryBox<F: Factory>: PreparableAnyFactory, AnyFactoryBox, MainThreadChecking, CustomStringConvertible {
 
     typealias FactoryType = F

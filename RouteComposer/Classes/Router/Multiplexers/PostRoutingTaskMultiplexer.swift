@@ -13,6 +13,7 @@
 import Foundation
 import UIKit
 
+@MainActor
 struct PostRoutingTaskMultiplexer: AnyPostRoutingTask, CustomStringConvertible {
 
     private let tasks: [AnyPostRoutingTask]

@@ -25,7 +25,7 @@ public extension UIViewController {
     /// - Returns: A `UIViewController` instance if found, `nil` otherwise.
     static func findViewController(in viewController: UIViewController,
                                    options: SearchOptions = .currentAndUp,
-                                   containerAdapterLocator: ContainerAdapterLocator = RouteComposerDefaults.shared.containerAdapterLocator,
+                                   containerAdapterLocator: ContainerAdapterLocator,
                                    using predicate: (UIViewController) -> Bool) throws -> UIViewController? {
         guard !viewController.isBeingDismissed else {
             return nil
@@ -90,4 +90,23 @@ public extension UIViewController {
         return nil
     }
 
+    /// Iterates through the view controller stack to finds a `UIViewController` instance.
+    ///
+    /// - Parameters:
+    ///   - viewController: A `UIViewController` instance to start from.
+    ///   - options: A combination of `SearchOptions`.
+    ///   - predicate: A block that should return `true` if the `UIViewController` instance provided is the
+    ///     one that is being searched for.
+    ///
+    /// required due to https://github.com/apple/swift/issues/58177
+    ///
+    /// - Returns: A `UIViewController` instance if found, `nil` otherwise.
+    static func findViewController(in viewController: UIViewController,
+                                   options: SearchOptions = .currentAndUp,
+                                   using predicate: (UIViewController) -> Bool) throws -> UIViewController? {
+        try findViewController(in: viewController,
+                           options: options,
+                           containerAdapterLocator: RouteComposerDefaults.shared.containerAdapterLocator,
+                           using: predicate)
+    }
 }

@@ -12,6 +12,7 @@
 
 import Foundation
 
+@MainActor
 final class ContextTransformerBox<T: ContextTransformer>: AnyContextTransformer {
 
     let transformer: T
