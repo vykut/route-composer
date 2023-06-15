@@ -12,8 +12,6 @@
 
 import Foundation
 
-private let lock = NSObject()
-
 /// Default configuration for all the instances in `RouteComposer`.
 ///
 /// **NB:** If you are going to provide your own defaults, make sure that `RouteComposerDefaults.configureWith(...)` is called
@@ -25,9 +23,7 @@ public final class RouteComposerDefaults {
 
     /// Singleton access.
     public static var shared: RouteComposerDefaults = {
-        objc_sync_enter(lock)
         defer {
-            objc_sync_exit(lock)
             configurationStorage?.logInstantiation()
         }
         switch configurationStorage {
@@ -70,10 +66,6 @@ public final class RouteComposerDefaults {
                                     windowProvider: WindowProvider,
                                     containerAdapterLocator: ContainerAdapterLocator,
                                     stackIterator: StackIterator? = nil) {
-        objc_sync_enter(lock)
-        defer {
-            objc_sync_exit(lock)
-        }
         guard configurationStorage == nil else {
             assertionFailure("Default values were initialised once. \(#function) must be called before any RouteComposer instantiation!")
             return

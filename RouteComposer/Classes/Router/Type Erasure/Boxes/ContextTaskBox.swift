@@ -14,7 +14,7 @@ import Foundation
 import UIKit
 
 @MainActor
-struct ContextTaskBox<CT: ContextTask>: AnyContextTask, PreparableEntity, MainThreadChecking, CustomStringConvertible {
+struct ContextTaskBox<CT: ContextTask>: AnyContextTask, PreparableEntity, CustomStringConvertible {
 
     var contextTask: CT
 
@@ -38,7 +38,6 @@ struct ContextTaskBox<CT: ContextTask>: AnyContextTask, PreparableEntity, MainTh
         }
         let typedContext: CT.Context = try context.value()
 
-        assertIfNotMainThread()
         assertIfNotPrepared()
         try contextTask.perform(on: typedViewController, with: typedContext)
     }

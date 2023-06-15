@@ -14,7 +14,7 @@ import UIKit
 
 /// Default implementation of `StackPresentationHandler`
 @MainActor
-public struct DefaultStackPresentationHandler: StackPresentationHandler, MainThreadChecking {
+public struct DefaultStackPresentationHandler: StackPresentationHandler {
 
     // MARK: Properties
 
@@ -49,7 +49,6 @@ public struct DefaultStackPresentationHandler: StackPresentationHandler, MainThr
     }
 
     public func dismissPresented(from viewController: UIViewController, animated: Bool, completion: @escaping (_: RoutingResult) -> Void) {
-        assertIfNotMainThread(logger: logger)
         if let presentedController = viewController.presentedViewController {
             if !presentedController.isBeingDismissed {
                 viewController.dismiss(animated: animated) {
@@ -70,7 +69,6 @@ public struct DefaultStackPresentationHandler: StackPresentationHandler, MainThr
         var parentViewControllers = viewController.allParents
         let topParentViewController = parentViewControllers.last
         func makeVisible(viewController: UIViewController, completion: @escaping (RoutingResult) -> Void) {
-            assertIfNotMainThread(logger: logger)
             guard !parentViewControllers.isEmpty else {
                 if !animated,
                    let topParentViewController,

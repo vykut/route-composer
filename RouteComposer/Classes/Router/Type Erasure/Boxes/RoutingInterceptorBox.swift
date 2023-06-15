@@ -13,7 +13,7 @@
 import Foundation
 
 @MainActor
-struct RoutingInterceptorBox<RI: RoutingInterceptor>: AnyRoutingInterceptor, PreparableEntity, CustomStringConvertible, MainThreadChecking {
+struct RoutingInterceptorBox<RI: RoutingInterceptor>: AnyRoutingInterceptor, PreparableEntity, CustomStringConvertible {
 
     var routingInterceptor: RI
 
@@ -33,9 +33,7 @@ struct RoutingInterceptorBox<RI: RoutingInterceptor>: AnyRoutingInterceptor, Pre
         do {
             let typedContext: RI.Context = try context.value()
             assertIfNotPrepared()
-            assertIfNotMainThread()
             routingInterceptor.perform(with: typedContext) { result in
-                assertIfNotMainThread()
                 completion(result)
             }
         } catch {

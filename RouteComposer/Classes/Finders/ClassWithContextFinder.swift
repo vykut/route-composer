@@ -17,6 +17,7 @@ import UIKit
 /// and its `Context` instance.
 ///
 /// The view controller should conform to the `ContextChecking` to be used with this finder.
+@MainActor
 public struct ClassWithContextFinder<VC: ContextChecking, C>: StackIteratingFinder where VC.Context == C, VC: UIViewController {
 
     // MARK: Associated types
@@ -35,8 +36,15 @@ public struct ClassWithContextFinder<VC: ContextChecking, C>: StackIteratingFind
     /// Constructor
     ///
     /// - Parameter iterator: A `StackIterator` is to be used by `ClassWithContextFinder`
-    public init(iterator: StackIterator = RouteComposerDefaults.shared.stackIterator) {
+    public init(iterator: StackIterator) {
         self.iterator = iterator
+    }
+
+    /// Constructor
+    ///
+    /// required due to https://github.com/apple/swift/issues/58177
+    public init() {
+        self.init(iterator: RouteComposerDefaults.shared.stackIterator)
     }
 
     public func isTarget(_ viewController: VC, with context: C) -> Bool {
@@ -57,9 +65,25 @@ public extension ClassWithContextFinder {
     ///   - containerAdapterLocator: A `ContainerAdapterLocator` instance.
     init(options: SearchOptions,
          startingPoint: DefaultStackIterator.StartingPoint = .topmost,
-         windowProvider: WindowProvider = RouteComposerDefaults.shared.windowProvider,
-         containerAdapterLocator: ContainerAdapterLocator = RouteComposerDefaults.shared.containerAdapterLocator) {
-        self.iterator = DefaultStackIterator(options: options, startingPoint: startingPoint, windowProvider: windowProvider, containerAdapterLocator: containerAdapterLocator)
+         windowProvider: WindowProvider,
+         containerAdapterLocator: ContainerAdapterLocator) {
+        self.init(iterator: DefaultStackIterator(options: options, startingPoint: startingPoint, windowProvider: windowProvider, containerAdapterLocator: containerAdapterLocator))
+    }
+
+    /// Constructor
+    ///
+    /// Parameters
+    ///   - options: A combination of the `SearchOptions`
+    ///   - startingPoint: `DefaultStackIterator.StartingPoint` value
+    ///
+    ///   required due to https://github.com/apple/swift/issues/58177
+    init(options: SearchOptions,
+         startingPoint: DefaultStackIterator.StartingPoint = .topmost) {
+        let defaults = RouteComposerDefaults.shared
+        self.init(iterator: DefaultStackIterator(options: options,
+                                                 startingPoint: startingPoint,
+                                                 windowProvider: defaults.windowProvider,
+                                                 containerAdapterLocator: defaults.containerAdapterLocator))
     }
 
 }

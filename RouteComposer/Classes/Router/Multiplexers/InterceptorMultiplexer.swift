@@ -13,7 +13,7 @@
 import Foundation
 
 @MainActor
-struct InterceptorMultiplexer: AnyRoutingInterceptor, MainThreadChecking, CustomStringConvertible {
+struct InterceptorMultiplexer: AnyRoutingInterceptor, CustomStringConvertible {
 
     private var interceptors: [AnyRoutingInterceptor]
 
@@ -38,9 +38,7 @@ struct InterceptorMultiplexer: AnyRoutingInterceptor, MainThreadChecking, Custom
         var interceptors = interceptors
 
         func runInterceptor(interceptor: AnyRoutingInterceptor) {
-            assertIfNotMainThread()
             interceptor.perform(with: context) { result in
-                assertIfNotMainThread()
                 if case .failure = result {
                     completion(result)
                 } else if interceptors.isEmpty {
